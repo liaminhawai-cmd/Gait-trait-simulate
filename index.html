@@ -130,7 +130,7 @@
   }
   @media (max-width:760px){
     #sidebar{width:100%;min-width:unset}
-    canvas{height:380px}
+    canvas{height:420px}
   }
 </style>
 </head>
@@ -597,15 +597,24 @@
     var perpX=-uz, perpZ=ux;
     var e1X=px+perpX*h, e1Z=pz+perpZ*h;
     var e2X=px-perpX*h, e2Z=pz-perpZ*h;
-    return (e1X>=e2X)?{X:e1X,Z:e1Z}:{X:e2X,Z:e2Z};
+    // Pick the elbow that sits BEHIND the shoulder->hand chord (smaller world X)
+    // so the forearm reaches forward naturally instead of hyperextending.
+    return (e1X<=e2X)?{X:e1X,Z:e1Z}:{X:e2X,Z:e2Z};
   }
 
   var projK=0.62, projK2=0.22;
   function proj(X,Y,Z){ return {x:X+projK*Y, y:-Z+projK2*Y}; }
-  var cW=920,cH=500, origin,groundY;
-  function updateOrigin(){ origin={x:cW*0.50,y:cH*0.55}; groundY=cH*0.78; }
+  var cW=920,cH=500, origin,groundY,figScale=1;
+  // The figure spans ~380 world units from feet to head (plus bounce). Scale it
+  // so it always fits the available height above the ground line — otherwise the
+  // head clips off the top of short (mobile) canvases.
+  function updateOrigin(){
+    origin={x:cW*0.50,y:cH*0.55};
+    groundY=cH*0.80;
+    figScale=clamp((groundY-18)/380,0.5,1.0);
+  }
   updateOrigin();
-  function toScreen(w){ var p=proj(w.X,w.Y,w.Z); return {x:origin.x+p.x,y:groundY+p.y}; }
+  function toScreen(w){ var p=proj(w.X,w.Y,w.Z); return {x:origin.x+p.x*figScale,y:groundY+p.y*figScale}; }
 
   function drawLimb(a,b,w,alpha,stroke){
     ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=stroke; ctx.lineWidth=w;
