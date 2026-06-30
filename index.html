@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Evidence-Based Gait Trait Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1016; --surface:#171a23; --surface2:#1d2130; --surface3:#232838;
+    --border:#2a2f40; --text:#e6e8f0; --text-dim:#8b90a6; --text-dim2:#6b7088;
+    --accent:#6c7aee; --accent2:#8b5cf6; --accent-dim:rgba(108,122,238,0.15);
+    --green:#4ade80; --amber:#fbbf24; --rose:#f87171; --cyan:#38bdf8;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    padding:22px 16px 48px;line-height:1.5;
+  }
+  a{color:var(--accent);text-decoration:none}
+  header{text-align:center;margin-bottom:18px;max-width:780px}
+  header h1{font-size:24px;font-weight:700;letter-spacing:-0.4px;margin-bottom:7px;
+    background:linear-gradient(90deg,#fff,#aab4ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  header p{font-size:13.5px;color:var(--text-dim);line-height:1.5}
+  .pills{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;padding:3px 10px;
+    border-radius:999px;background:var(--accent-dim);color:#aab4ff;letter-spacing:0.3px}
+
+  #wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;justify-content:center;max-width:1500px;width:100%}
+
+  #sidebar{width:330px;min-width:300px;display:flex;flex-direction:column;gap:12px}
+  #centercol{flex:1;min-width:480px;display:flex;flex-direction:column;gap:12px}
+  #evidencecol{width:360px;min-width:320px;display:flex;flex-direction:column;gap:12px}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.9px;color:var(--text-dim);margin-bottom:12px}
+
+  .collapsible-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+  .collapsible-header .card-title{margin-bottom:0}
+  .collapse-chevron{font-size:13px;color:var(--text-dim);transition:transform .2s ease}
+  .collapse-chevron.open{transform:rotate(180deg)}
+  .collapsible-body{overflow:hidden;max-height:0;transition:max-height .3s ease,margin-top .3s ease;margin-top:0}
+  .collapsible-body.open{max-height:600px;margin-top:12px}
+
+  .row{display:grid;grid-template-columns:1fr 46px;gap:6px 8px;align-items:center;margin:11px 0}
+  .row .labelrow{display:flex;align-items:center;gap:6px;grid-column:1/2}
+  .row label{font-size:13px;font-weight:500;color:var(--text);cursor:pointer}
+  .row .info{font-size:10px;width:15px;height:15px;line-height:15px;text-align:center;border-radius:50%;
+    background:var(--surface3);color:var(--text-dim);cursor:pointer;font-weight:600;flex:none;transition:all .15s}
+  .row .info:hover{background:var(--accent);color:#fff}
+  .row output{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;color:#aab4ff;font-size:11.5px;text-align:right}
+  .row input[type=range]{grid-column:1/3}
+
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;
+    background:var(--surface2);outline:none;cursor:pointer;margin-top:3px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;
+    border-radius:50%;background:var(--accent);border:2px solid var(--bg);box-shadow:0 0 0 2px var(--accent);
+    cursor:pointer;transition:transform .12s ease}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.18)}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--accent);
+    border:2px solid var(--bg);box-shadow:0 0 0 2px var(--accent);cursor:pointer}
+
+  .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .preset-btn{font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:500;padding:8px 10px;border-radius:9px;
+    border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:all .15s ease;text-align:center}
+  .preset-btn:hover{background:var(--accent-dim);border-color:var(--accent);color:#aab4ff}
+  .preset-btn.active{background:var(--accent-dim);border-color:var(--accent);color:#aab4ff;box-shadow:0 0 0 1px var(--accent)}
+
+  .toggle-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text);margin:7px 0}
+  .toggle-row select{font-family:'DM Sans',sans-serif;padding:5px 8px;border-radius:8px;border:1px solid var(--border);
+    background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer}
+  .toggle-row select:focus{outline:1px solid var(--accent)}
+  .toggle-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
+
+  .btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:8px 12px;border-radius:9px;
+    border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:all .15s;flex:1}
+  .btn:hover{background:var(--accent-dim);border-color:var(--accent);color:#aab4ff}
+
+  #canvasBox{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px;position:relative}
+  canvas{border-radius:9px;width:100%;height:500px;display:block}
+  #info-bar{position:absolute;bottom:16px;left:16px;right:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .info-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 9px;border-radius:6px;
+    background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.72);backdrop-filter:blur(6px)}
+
+  /* metrics readout */
+  .metric{margin:9px 0}
+  .metric-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .metric-head .mname{font-size:12px;font-weight:500;color:var(--text)}
+  .metric-head .mval{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim)}
+  .metric-track{height:7px;border-radius:4px;background:var(--surface2);overflow:hidden}
+  .metric-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    transition:width .12s linear,background .3s}
+
+  /* evidence panel */
+  #evHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+  #evTitle{font-size:16px;font-weight:700;letter-spacing:-0.2px}
+  .strength{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;padding:3px 9px;border-radius:999px;
+    text-transform:uppercase;letter-spacing:0.4px;white-space:nowrap}
+  .s-strong{background:rgba(74,222,128,0.15);color:var(--green)}
+  .s-moderate{background:rgba(56,189,248,0.15);color:var(--cyan)}
+  .s-emerging{background:rgba(251,191,36,0.15);color:var(--amber)}
+  .s-speculative{background:rgba(248,113,113,0.15);color:var(--rose)}
+  #evSummary{font-size:12.5px;color:var(--text-dim);margin-bottom:14px;line-height:1.55}
+  .ev-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-dim);margin:0 0 8px}
+  .feat{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;margin:7px 0;color:var(--text)}
+  .feat .arrow{font-family:'JetBrains Mono',monospace;font-weight:600;flex:none;width:16px;text-align:center}
+  .feat .up{color:var(--green)}
+  .feat .down{color:var(--rose)}
+  .feat .var{color:var(--amber)}
+  .refs{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+  .ref{font-size:11px;color:var(--text-dim);margin:7px 0;line-height:1.5;padding-left:14px;position:relative}
+  .ref:before{content:"§";position:absolute;left:0;color:var(--accent)}
+  .ev-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+  .ev-tab{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);
+    color:var(--text-dim);cursor:pointer;transition:all .15s}
+  .ev-tab:hover{color:var(--text);border-color:var(--accent)}
+  .ev-tab.active{background:var(--accent-dim);border-color:var(--accent);color:#aab4ff}
+
+  .note-text{font-size:11.5px;color:var(--text-dim);line-height:1.55}
+  .disclaimer{font-size:11px;color:var(--text-dim);line-height:1.5;background:rgba(251,191,36,0.06);
+    border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:11px 13px}
+  .disclaimer b{color:var(--amber)}
+  #err{color:var(--rose);font-size:12px;padding:8px 0}
+
+  @media (max-width:1200px){
+    #evidencecol{width:100%;min-width:unset;order:3}
+    #centercol{min-width:unset;width:100%}
+  }
+  @media (max-width:760px){
+    #sidebar{width:100%;min-width:unset}
+    canvas{height:380px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Evidence-Based Gait Trait Simulator</h1>
+  <p>An interactive model of how psychological and neurodevelopmental traits relate to observable walking patterns. Each mapping is annotated with the gait-research literature it draws on — and an honest rating of how strong that evidence is.</p>
+  <div class="pills">
+    <span class="pill">v8.0</span>
+    <span class="pill">9 traits</span>
+    <span class="pill">cited literature</span>
+    <span class="pill">live metrics</span>
+    <span class="pill">IK + spring dynamics</span>
+  </div>
+</header>
+
+<div id="wrap">
+  <!-- ================= SIDEBAR (controls) ================= -->
+  <div id="sidebar">
+    <div class="card">
+      <div class="collapsible-header" id="presetToggle">
+        <span class="card-title">Quick Presets</span>
+        <span class="collapse-chevron open" id="presetChevron">&#9660;</span>
+      </div>
+      <div class="collapsible-body open" id="presetBody">
+        <div class="preset-grid">
+          <button class="preset-btn" data-preset="baseline">Neutral baseline</button>
+          <button class="preset-btn" data-preset="highASD">Autistic gait</button>
+          <button class="preset-btn" data-preset="highADHD">ADHD</button>
+          <button class="preset-btn" data-preset="anxious">Anxious</button>
+          <button class="preset-btn" data-preset="depressed">Depressed</button>
+          <button class="preset-btn" data-preset="manic">Manic</button>
+          <button class="preset-btn" data-preset="dissociated">Dissociated</button>
+          <button class="preset-btn" data-preset="confident">Confident</button>
+          <button class="preset-btn" data-preset="aggressive">Aggressive</button>
+          <button class="preset-btn" data-preset="combined">ASD + ADHD</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Neurodevelopmental</div>
+      <div class="row" data-trait="asd">
+        <div class="labelrow"><label for="asd">Autism (ASD)</label><span class="info" data-trait="asd">i</span></div>
+        <output id="asdOut">0.30</output>
+        <input id="asd" type="range" min="0" max="1" step="0.01" value="0.30">
+      </div>
+      <div class="row" data-trait="adhd">
+        <div class="labelrow"><label for="adhd">ADHD</label><span class="info" data-trait="adhd">i</span></div>
+        <output id="adhdOut">0.25</output>
+        <input id="adhd" type="range" min="0" max="1" step="0.01" value="0.25">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Affect &amp; State</div>
+      <div class="row" data-trait="anx">
+        <div class="labelrow"><label for="anx">Anxiety</label><span class="info" data-trait="anx">i</span></div>
+        <output id="anxOut">0.15</output>
+        <input id="anx" type="range" min="0" max="1" step="0.01" value="0.15">
+      </div>
+      <div class="row" data-trait="dep">
+        <div class="labelrow"><label for="dep">Depression</label><span class="info" data-trait="dep">i</span></div>
+        <output id="depOut">0.10</output>
+        <input id="dep" type="range" min="0" max="1" step="0.01" value="0.10">
+      </div>
+      <div class="row" data-trait="mania">
+        <div class="labelrow"><label for="mania">Mania</label><span class="info" data-trait="mania">i</span></div>
+        <output id="maniaOut">0.00</output>
+        <input id="mania" type="range" min="0" max="1" step="0.01" value="0.00">
+      </div>
+      <div class="row" data-trait="dissoc">
+        <div class="labelrow"><label for="dissoc">Dissociation</label><span class="info" data-trait="dissoc">i</span></div>
+        <output id="dissocOut">0.00</output>
+        <input id="dissoc" type="range" min="0" max="1" step="0.01" value="0.00">
+      </div>
+      <div class="row" data-trait="arousal">
+        <div class="labelrow"><label for="arousal">Arousal</label><span class="info" data-trait="arousal">i</span></div>
+        <output id="arousalOut">0.50</output>
+        <input id="arousal" type="range" min="0" max="1" step="0.01" value="0.50">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Interpersonal</div>
+      <div class="row" data-trait="conf">
+        <div class="labelrow"><label for="conf">Confidence</label><span class="info" data-trait="conf">i</span></div>
+        <output id="confOut">0.50</output>
+        <input id="conf" type="range" min="0" max="1" step="0.01" value="0.50">
+      </div>
+      <div class="row" data-trait="agg">
+        <div class="labelrow"><label for="agg">Aggression</label><span class="info" data-trait="agg">i</span></div>
+        <output id="aggOut">0.10</output>
+        <input id="agg" type="range" min="0" max="1" step="0.01" value="0.10">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Display</div>
+      <div class="toggle-row"><span>Style</span>
+        <select id="styleSel">
+          <option value="real">Realistic</option>
+          <option value="toon">Exaggerated</option>
+        </select>
+      </div>
+      <div class="toggle-row"><input id="showSkeleton" type="checkbox"/><label for="showSkeleton">Skeleton overlay</label></div>
+      <div class="toggle-row"><input id="showTrail" type="checkbox"/><label for="showTrail">Motion trail</label></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn" id="resetBtn">Reset all</button>
+        <button class="btn" id="copyBtn">Copy settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CENTER (figure + metrics) ================= -->
+  <div id="centercol">
+    <div id="canvasBox">
+      <canvas id="c"></canvas>
+      <div id="info-bar">
+        <span class="info-chip" id="chipSpeed">speed: --</span>
+        <span class="info-chip" id="chipCadence">cadence: --</span>
+        <span class="info-chip" id="chipStride">stride: --</span>
+        <span class="info-chip" id="chipVar">variability: --</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Live gait metrics</div>
+      <div class="metric"><div class="metric-head"><span class="mname">Gait speed</span><span class="mval" id="mSpeed">--</span></div><div class="metric-track"><div class="metric-fill" id="fSpeed"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Cadence</span><span class="mval" id="mCad">--</span></div><div class="metric-track"><div class="metric-fill" id="fCad"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Stride length</span><span class="mval" id="mStride">--</span></div><div class="metric-track"><div class="metric-fill" id="fStride"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Step width (base of support)</span><span class="mval" id="mWidth">--</span></div><div class="metric-track"><div class="metric-fill" id="fWidth"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Arm swing</span><span class="mval" id="mArm">--</span></div><div class="metric-track"><div class="metric-fill" id="fArm"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Trunk flexion (forward lean)</span><span class="mval" id="mPitch">--</span></div><div class="metric-track"><div class="metric-fill" id="fPitch"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">Gait variability</span><span class="mval" id="mVar">--</span></div><div class="metric-track"><div class="metric-fill" id="fVar"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ================= EVIDENCE PANEL ================= -->
+  <div id="evidencecol">
+    <div class="card">
+      <div id="evHead">
+        <span id="evTitle">Evidence</span>
+        <span class="strength" id="evStrength"></span>
+      </div>
+      <div class="ev-tabs" id="evTabs"></div>
+      <div id="evSummary"></div>
+      <div id="evFeatures"></div>
+      <div class="refs" id="evRefs"></div>
+    </div>
+    <div class="card">
+      <div class="disclaimer">
+        <b>Read this first.</b> These are <b>group-level statistical associations</b> reported in research — averages across studied populations, not a way to diagnose or "read" any individual. Many effects are small, overlap heavily with typical gait, and depend on context, comorbidity and measurement method. This is an educational visualization, not a clinical instrument.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="err"></div>
+
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  /* =========================================================
+     EVIDENCE BASE
+     Each trait: observable gait features (with direction),
+     a plain-language summary, an evidence-strength rating,
+     and the key references those claims rest on.
+     Directions:  up = increases, down = decreases, var = more variable/irregular
+     ========================================================= */
+  var EVIDENCE = {
+    asd:{
+      title:"Autism (ASD)", strength:"moderate",
+      summary:"Studies of autistic walkers fairly consistently report a less stable, more variable gait with a wider base of support, plus a meaningfully elevated rate of toe-walking. Effects are clearest in children and grow with motor-coordination differences.",
+      features:[
+        ["var","Higher stride-to-stride variability"],
+        ["up","Wider base of support (step width)"],
+        ["down","Shorter stride length & slower speed"],
+        ["up","Toe-walking / reduced heel strike (subset)"],
+        ["down","Reduced & atypical arm swing, more trunk sway"]
+      ],
+      refs:[
+        "Kindregan, Gallagher & Gormley (2015). Gait deviations in children with ASD: a review. Autism Res Treat.",
+        "Hallett et al. (1993). Locomotion of autistic adults. Arch Neurol.",
+        "Nayate et al. (2012); Calhoun et al. (2011) — increased gait variability & step width."
+      ]
+    },
+    adhd:{
+      title:"ADHD", strength:"moderate",
+      summary:"The most replicated ADHD gait finding is increased step-to-step variability and reduced stride regularity, amplified under dual-task (walking while thinking). It looks less like a fixed posture and more like an inconsistent, fidgety, wandering rhythm.",
+      features:[
+        ["var","Increased stride-time & step-length variability"],
+        ["var","Reduced rhythmic consistency, esp. dual-task"],
+        ["up","More extraneous / restless body movement"],
+        ["var","Less stable centre-of-mass control"]
+      ],
+      refs:[
+        "Manicolo et al. (2017). Gait variability in children with ADHD. Gait & Posture.",
+        "Papadopoulos et al. (2014). Motor proficiency & gait in ADHD.",
+        "Leitner et al. (2007) — dual-task gait cost in ADHD."
+      ]
+    },
+    anx:{
+      title:"Anxiety", strength:"moderate",
+      summary:"Anxiety and threat tend to produce a 'cautious' or guarded gait: slower, shorter, stiffer steps with tighter trunk control and reduced gait flexibility — the body bracing as if the ground were less safe. High state anxiety can also raise step-timing variability.",
+      features:[
+        ["down","Slower speed, shorter steps (cautious gait)"],
+        ["up","Increased double-support / guardedness"],
+        ["down","Reduced arm swing & trunk rotation (stiffening)"],
+        ["var","More step-placement variability when keyed-up"],
+        ["up","Slightly faster, tense cadence under arousal"]
+      ],
+      refs:[
+        "Staab (2012). Chronic subjective dizziness / functional gait. Continuum.",
+        "Feldman et al. (2019). Anxiety & cautious gait. Gait & Posture.",
+        "Brandt (1996); Schaefer et al. — anxiety, threat & guarded locomotion."
+      ]
+    },
+    dep:{
+      title:"Depression", strength:"strong",
+      summary:"This is one of the best-established trait→gait links. In Michalak et al.'s motion-capture work, dysphoric/depressed mood produced reduced walking speed, markedly reduced arm swing, a slumped (forward-flexed) posture, less vertical bounce, and increased lateral upper-body sway.",
+      features:[
+        ["down","Reduced walking speed & cadence"],
+        ["down","Markedly reduced arm swing"],
+        ["up","Slumped / forward-flexed posture"],
+        ["down","Less vertical 'bounce' (head/COM)"],
+        ["up","Increased lateral upper-body swaying"]
+      ],
+      refs:[
+        "Michalak et al. (2009). Embodiment of sadness and depression — gait patterns associated with dysphoric mood. Psychosom Med, 71:580-587.",
+        "Lemke et al. (2000). Spatiotemporal gait in major depression. J Psychiatr Res.",
+        "Sloman et al. (1982) — early gait-and-depression observations."
+      ]
+    },
+    mania:{
+      title:"Mania", strength:"emerging",
+      summary:"Mania centres on psychomotor activation: increased energy, speed and expansiveness. Direct motion-capture gait studies are sparse, so this maps DSM-level psychomotor agitation and actigraphy findings (raised activity, faster movement) onto a fast, big, slightly erratic walk.",
+      features:[
+        ["up","Faster cadence & speed (psychomotor activation)"],
+        ["up","Longer, more expansive strides"],
+        ["up","Large, energetic arm swing & bounce"],
+        ["up","Upright / open, chest-forward posture"],
+        ["var","Somewhat erratic, restless rhythm"]
+      ],
+      refs:[
+        "DSM-5 (2013): increased goal-directed activity & psychomotor agitation in mania.",
+        "Scott et al. / actigraphy studies — elevated motor activity in mania.",
+        "Limited direct gait-capture literature — treat as indicative."
+      ]
+    },
+    dissoc:{
+      title:"Dissociation", strength:"speculative",
+      summary:"There is little direct gait research on dissociation/depersonalization. The mapping is inferred from clinical descriptions of reduced embodiment and sense of agency — a flatter, more mechanical, 'going-through-the-motions' walk with damped expressiveness. Treat this as illustrative, not evidence-backed.",
+      features:[
+        ["down","Reduced expressiveness & bounce (flat affect of movement)"],
+        ["down","Damped arm swing & trunk dynamics"],
+        ["var","Mechanical, metronomic regularity"],
+        ["down","Reduced spontaneous head movement"]
+      ],
+      refs:[
+        "Sierra & Berrios (1998). Depersonalization: clinical phenomenology.",
+        "Embodiment / sense-of-agency literature (Gallagher 2000).",
+        "No validated quantitative gait dataset — lowest-confidence mapping."
+      ]
+    },
+    arousal:{
+      title:"Arousal", strength:"moderate",
+      summary:"Physiological/sympathetic arousal scales the 'energy' of gait: higher arousal generally raises cadence, speed and movement amplitude (bounce, arm swing); low arousal flattens them. Arousal is treated here as a modulator that interacts with the affective traits.",
+      features:[
+        ["up","Higher cadence & walking speed"],
+        ["up","Greater vertical bounce"],
+        ["up","Larger arm-swing amplitude"]
+      ],
+      refs:[
+        "Affect-circumplex & motor-activation literature (Russell 1980).",
+        "Actigraphy: arousal/activation correlates with movement amplitude.",
+        "Treated as a cross-cutting modulator rather than a diagnosis."
+      ]
+    },
+    conf:{
+      title:"Confidence / Dominance", strength:"moderate",
+      summary:"Confidence and felt dominance are linked to expansive, upright, larger-amplitude movement — longer strides, taller posture, an open chest. Observers reliably read such gait cues as confident, though 'power-posture' causal claims are contested.",
+      features:[
+        ["up","Longer stride length"],
+        ["up","Upright, extended posture (less forward lean)"],
+        ["up","Open chest & larger arm swing"],
+        ["down","Narrower, more committed base of support"]
+      ],
+      refs:[
+        "Satchell et al. (2017). Big Five & aggression in gait biomechanics. J Nonverbal Behav.",
+        "Montepare & Zebrowitz (1988) — age/emotion & gait perception.",
+        "Power-posture causal claims remain debated (Ranehill et al. 2015)."
+      ]
+    },
+    agg:{
+      title:"Aggression", strength:"moderate",
+      summary:"Satchell et al. (2017) found that trait aggression predicts exaggerated upper- and lower-body movement during walking — greater thoracic (shoulder) and pelvic rotation and a more emphatic, swaggering arm action. The hallmark here is upper-body swagger and toe-out.",
+      features:[
+        ["up","Exaggerated shoulder/thorax rotation (swagger)"],
+        ["up","Greater pelvic rotation & arm emphasis"],
+        ["up","Increased toe-out angle"],
+        ["up","Faster, more driving cadence"]
+      ],
+      refs:[
+        "Satchell, Morris, Mills, O'Reilly, Marshman & Akehurst (2017). Evidence of Big Five & Aggression Personality Traits in Gait. J Nonverbal Behav, 41:35-44.",
+        "Troje (2002) — biological-motion encoding of personality/affect.",
+        "Gait-perception studies on dominance & threat."
+      ]
+    }
+  };
+  var EV_ORDER = ["asd","adhd","anx","dep","mania","dissoc","arousal","conf","agg"];
+  var STRENGTH_TEXT = {strong:"Strong evidence",moderate:"Moderate evidence",emerging:"Emerging evidence",speculative:"Speculative"};
+
+  /* ---------- Evidence panel rendering ---------- */
+  function renderEvidence(key){
+    var e = EVIDENCE[key]; if(!e) return;
+    $("evTitle").textContent = e.title;
+    var st = $("evStrength");
+    st.textContent = STRENGTH_TEXT[e.strength];
+    st.className = "strength s-"+e.strength;
+    $("evSummary").textContent = e.summary;
+    var fh = '<div class="ev-section-label">Reported gait features</div>';
+    for(var i=0;i<e.features.length;i++){
+      var d=e.features[i][0], txt=e.features[i][1];
+      var sym = d==="up"?"&#9650;" : d==="down"?"&#9660;" : "&#8776;";
+      fh += '<div class="feat"><span class="arrow '+d+'">'+sym+'</span><span>'+txt+'</span></div>';
+    }
+    $("evFeatures").innerHTML = fh;
+    var rh = '<div class="ev-section-label">Key references</div>';
+    for(var j=0;j<e.refs.length;j++){ rh += '<div class="ref">'+e.refs[j]+'</div>'; }
+    $("evRefs").innerHTML = rh;
+    // tabs active state
+    var tabs = document.querySelectorAll(".ev-tab");
+    for(var k=0;k<tabs.length;k++){ tabs[k].classList.toggle("active", tabs[k].getAttribute("data-trait")===key); }
+  }
+  // build tabs
+  (function(){
+    var html="";
+    for(var i=0;i<EV_ORDER.length;i++){
+      var key=EV_ORDER[i];
+      html += '<span class="ev-tab" data-trait="'+key+'">'+EVIDENCE[key].title.replace(/ \/.*$/,"").replace(" (ASD)","")+'</span>';
+    }
+    $("evTabs").innerHTML = html;
+    var tabs=document.querySelectorAll(".ev-tab");
+    for(var t=0;t<tabs.length;t++){
+      tabs[t].addEventListener("click", function(){ renderEvidence(this.getAttribute("data-trait")); });
+    }
+  })();
+  // info icons + label clicks focus evidence
+  (function(){
+    var infos=document.querySelectorAll(".info, .row label");
+    for(var i=0;i<infos.length;i++){
+      var el=infos[i];
+      var tr = el.getAttribute("data-trait") || (el.parentNode && el.parentNode.parentNode && el.parentNode.parentNode.getAttribute("data-trait"));
+      (function(trait){
+        el.addEventListener("click", function(){ if(trait) renderEvidence(trait); });
+      })(tr);
+    }
+  })();
+  renderEvidence("dep"); // open on the strongest-evidence trait
+
+  /* =========================================================
+     CONTROLS
+     ========================================================= */
+  var presetToggle=$("presetToggle"), presetBody=$("presetBody"), presetChevron=$("presetChevron");
+  presetToggle.addEventListener("click", function(){
+    var open=presetBody.classList.toggle("open");
+    presetChevron.classList.toggle("open",open);
+  });
+
+  var sliders={asd:$("asd"),adhd:$("adhd"),anx:$("anx"),dep:$("dep"),mania:$("mania"),dissoc:$("dissoc"),arousal:$("arousal"),conf:$("conf"),agg:$("agg")};
+  var outs={asd:$("asdOut"),adhd:$("adhdOut"),anx:$("anxOut"),dep:$("depOut"),mania:$("maniaOut"),dissoc:$("dissocOut"),arousal:$("arousalOut"),conf:$("confOut"),agg:$("aggOut")};
+  function syncOut(){ for(var k in sliders){ outs[k].value=(+sliders[k].value).toFixed(2); } }
+  for(var k in sliders){
+    (function(key){
+      sliders[key].addEventListener("input", function(){ syncOut(); clearActivePreset(); renderEvidence(key); });
+    })(k);
+  }
+  syncOut();
+
+  var presets={
+    baseline:    {asd:0.00,adhd:0.00,anx:0.00,dep:0.00,mania:0.00,dissoc:0.00,arousal:0.50,conf:0.50,agg:0.00},
+    highASD:     {asd:0.85,adhd:0.15,anx:0.25,dep:0.10,mania:0.00,dissoc:0.00,arousal:0.35,conf:0.30,agg:0.05},
+    highADHD:    {asd:0.10,adhd:0.85,anx:0.20,dep:0.10,mania:0.00,dissoc:0.00,arousal:0.70,conf:0.50,agg:0.10},
+    anxious:     {asd:0.05,adhd:0.15,anx:0.85,dep:0.20,mania:0.00,dissoc:0.00,arousal:0.65,conf:0.20,agg:0.05},
+    depressed:   {asd:0.05,adhd:0.05,anx:0.25,dep:0.85,mania:0.00,dissoc:0.10,arousal:0.20,conf:0.20,agg:0.05},
+    manic:       {asd:0.05,adhd:0.30,anx:0.15,dep:0.00,mania:0.85,dissoc:0.00,arousal:0.85,conf:0.80,agg:0.20},
+    dissociated: {asd:0.05,adhd:0.00,anx:0.10,dep:0.30,mania:0.00,dissoc:0.85,arousal:0.20,conf:0.30,agg:0.00},
+    confident:   {asd:0.05,adhd:0.10,anx:0.05,dep:0.00,mania:0.00,dissoc:0.00,arousal:0.60,conf:0.90,agg:0.10},
+    aggressive:  {asd:0.05,adhd:0.15,anx:0.10,dep:0.05,mania:0.00,dissoc:0.00,arousal:0.75,conf:0.70,agg:0.90},
+    combined:    {asd:0.65,adhd:0.65,anx:0.30,dep:0.15,mania:0.00,dissoc:0.00,arousal:0.50,conf:0.35,agg:0.10}
+  };
+  var presetEvidenceFocus={highASD:"asd",highADHD:"adhd",anxious:"anx",depressed:"dep",manic:"mania",dissociated:"dissoc",confident:"conf",aggressive:"agg",combined:"asd",baseline:"dep"};
+
+  function clearActivePreset(){
+    var btns=document.querySelectorAll('.preset-btn');
+    for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  }
+  function applyPreset(name){
+    var p=presets[name]; if(!p) return;
+    for(var key in p){ if(sliders[key]) sliders[key].value=p[key]; }
+    syncOut(); clearActivePreset();
+    var btn=document.querySelector('[data-preset="'+name+'"]'); if(btn) btn.classList.add('active');
+    if(presetEvidenceFocus[name]) renderEvidence(presetEvidenceFocus[name]);
+  }
+  var presetBtns=document.querySelectorAll('.preset-btn');
+  for(var i=0;i<presetBtns.length;i++){
+    presetBtns[i].addEventListener('click', function(){ applyPreset(this.getAttribute('data-preset')); });
+  }
+
+  $("resetBtn").addEventListener("click", function(){ applyPreset("baseline"); });
+  $("copyBtn").addEventListener("click", function(){
+    var obj={}; for(var key in sliders){ obj[key]=+sliders[key].value; }
+    var txt=JSON.stringify(obj);
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); }
+    var b=$("copyBtn"), old=b.textContent; b.textContent="Copied!"; setTimeout(function(){b.textContent=old;},1100);
+  });
+
+  var styleSel=$("styleSel"), showSkeleton=$("showSkeleton"), showTrail=$("showTrail");
+
+  /* =========================================================
+     RENDER ENGINE  (IK limbs + spring dynamics, from v7.1)
+     ========================================================= */
+  var canvas=$("c"), ctx=canvas.getContext("2d");
+  function ensureCanvasSize(){
+    var r=canvas.getBoundingClientRect();
+    var dpr=window.devicePixelRatio||1;
+    var cssW=Math.max(320,r.width||0), cssH=Math.max(260,r.height||0);
+    var w=Math.floor(cssW*dpr), h=Math.floor(cssH*dpr);
+    if(canvas.width!==w||canvas.height!==h){ canvas.width=w; canvas.height=h; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    return {w:cssW,h:cssH};
+  }
+  function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function smoothstep(a,b,x){ var t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+  function deg2rad(d){ return d*Math.PI/180; }
+  function rand(seed){ var x=Math.sin(seed*999.1337)*10000; return x-Math.floor(x); }
+  function ease(u){ return u*u*(3-2*u); }
+  function pow2(x){ return x*x; }
+
+  function kneeIK2D(hip,ankle,thigh,shin){
+    var dx=ankle.X-hip.X, dz=ankle.Z-hip.Z;
+    var d=Math.sqrt(dx*dx+dz*dz);
+    var minD=Math.abs(thigh-shin)+1e-3, maxD=(thigh+shin)-1e-3;
+    d=clamp(d,minD,maxD);
+    var a=(thigh*thigh-shin*shin+d*d)/(2*d);
+    var h2=thigh*thigh-a*a; if(h2<0)h2=0;
+    var h=Math.sqrt(h2);
+    var ux=dx/d, uz=dz/d;
+    var px=hip.X+a*ux, pz=hip.Z+a*uz;
+    var perpX=-uz, perpZ=ux;
+    return {X:px+perpX*h, Z:pz+perpZ*h};
+  }
+  function armIK2D(shoulder,hand,upper,lower){
+    var dx=hand.X-shoulder.X, dz=hand.Z-shoulder.Z;
+    var d=Math.sqrt(dx*dx+dz*dz);
+    var maxLen=upper+lower-0.001, minLen=Math.abs(upper-lower)+0.001;
+    d=clamp(d,minLen,maxLen);
+    var a=(upper*upper-lower*lower+d*d)/(2*d);
+    var h=Math.sqrt(Math.max(0,upper*upper-a*a));
+    var ux=dx/d, uz=dz/d;
+    var px=shoulder.X+a*ux, pz=shoulder.Z+a*uz;
+    var perpX=-uz, perpZ=ux;
+    var e1X=px+perpX*h, e1Z=pz+perpZ*h;
+    var e2X=px-perpX*h, e2Z=pz-perpZ*h;
+    return (e1X>=e2X)?{X:e1X,Z:e1Z}:{X:e2X,Z:e2Z};
+  }
+
+  var projK=0.62, projK2=0.22;
+  function proj(X,Y,Z){ return {x:X+projK*Y, y:-Z+projK2*Y}; }
+  var cW=920,cH=500, origin,groundY;
+  function updateOrigin(){ origin={x:cW*0.50,y:cH*0.55}; groundY=cH*0.78; }
+  updateOrigin();
+  function toScreen(w){ var p=proj(w.X,w.Y,w.Z); return {x:origin.x+p.x,y:groundY+p.y}; }
+
+  function drawLimb(a,b,w,alpha,stroke){
+    ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=stroke; ctx.lineWidth=w;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); ctx.restore();
+  }
+  function drawJoint(p,r,fill,alpha){
+    ctx.save(); ctx.globalAlpha=alpha||1; ctx.fillStyle=fill;
+    ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2); ctx.fill(); ctx.restore();
+  }
+  function drawGround(scroll,dims){
+    var w=dims.w,h=dims.h;
+    var g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,"#161a28"); g.addColorStop(0.45,"#1a2032"); g.addColorStop(0.56,"#172619"); g.addColorStop(1,"#0d160f");
+    ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle="rgba(100,200,130,0.2)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(0,groundY); ctx.lineTo(w,groundY); ctx.stroke();
+    var bandTop=groundY,bandBottom=h;
+    ctx.save(); ctx.beginPath(); ctx.rect(0,bandTop,w,bandBottom-bandTop); ctx.clip();
+    function grassLayer(speedMul,alpha,spacing){
+      ctx.strokeStyle="rgba(80,180,100,"+alpha+")"; ctx.lineWidth=1.5;
+      var off=(scroll*speedMul)%spacing;
+      for(var x=-spacing;x<w+spacing;x+=spacing){ var xx=x-off; ctx.beginPath(); ctx.moveTo(xx,bandBottom); ctx.lineTo(xx+8,bandBottom-20); ctx.stroke(); }
+    }
+    grassLayer(1.0,0.15,26); grassLayer(0.55,0.08,42);
+    ctx.fillStyle="rgba(255,255,255,0.015)";
+    for(var i=0;i<6;i++){ var y=bandTop+i*20+((scroll*0.25)%20); ctx.fillRect(0,y,w,1); }
+    ctx.restore();
+  }
+  function drawFoot(ankle,theta,footLen,liftPx,alpha,stroke,toeWalkAmt,inStance){
+    var dirX=Math.cos(theta),dirY=Math.sin(theta);
+    var heelW={X:ankle.X-0.25*footLen*dirX,Y:ankle.Y-0.25*footLen*dirY,Z:0};
+    var toeW={X:ankle.X+0.75*footLen*dirX,Y:ankle.Y+0.75*footLen*dirY,Z:0};
+    var heelS=toScreen(heelW),toeS=toScreen(toeW);
+    var heelLift=inStance?toeWalkAmt*16:0;
+    heelS.y-=(liftPx+heelLift); toeS.y-=(liftPx);
+    drawLimb(heelS,toeS,5,alpha,stroke);
+  }
+
+  var noise={stride:0,time:0,phase:0,next:0,tStride:0,tTime:0,tPhase:0};
+  var stepLock={idx:-1,strideMul:1.0,timeMul:1.0};
+  function updateNoise(t,ADHD,variability){
+    if(t>noise.next){
+      var interval=0.18+0.18*rand(Math.floor(t*10)+901);
+      noise.next=t+interval;
+      var ampS=0.45*ADHD*variability, ampT=0.55*ADHD*variability;
+      noise.tStride=(rand(Math.floor(t*97)+11)-0.5)*2*ampS;
+      noise.tTime=(rand(Math.floor(t*83)+17)-0.5)*2*ampT;
+      noise.tPhase=(rand(Math.floor(t*71)+23)-0.5)*2*(0.10*ADHD);
+    }
+    var k=0.045;
+    noise.stride+=(noise.tStride-noise.stride)*k;
+    noise.time+=(noise.tTime-noise.time)*k;
+    noise.phase+=(noise.tPhase-noise.phase)*k;
+    var idx=Math.floor(t*2);
+    if(idx!==stepLock.idx){
+      stepLock.idx=idx;
+      var s=(rand(idx*101+777)-0.5)*2, c=(rand(idx*131+333)-0.5)*2;
+      var sAmp=0.14*ADHD*variability, cAmp=0.10*ADHD*variability;
+      stepLock.strideMul=clamp(1+s*sAmp,0.86,1.16);
+      stepLock.timeMul=clamp(1+c*cAmp,0.88,1.12);
+    }
+    var strideMul=clamp(stepLock.strideMul*(1+0.04*noise.stride),0.84,1.18);
+    var timeMul=clamp(stepLock.timeMul*(1+0.06*noise.time),0.86,1.16);
+    return {strideMul:strideMul,timeMul:timeMul,phaseBias:noise.phase};
+  }
+
+  var footState={
+    L:{planted:null,wasInStance:true,stepX:0,nextX:44,laneY:-11,nextLaneY:-11},
+    R:{planted:null,wasInStance:true,stepX:22,nextX:66,laneY:11,nextLaneY:11}
+  };
+  var comDrift={x:0,y:0,tx:0,ty:0,next:0};
+  function updateComDrift(t,ADHD,MANIA,variability){
+    if(t>comDrift.next){
+      var interval=0.30+0.20*rand(Math.floor(t*10)+123);
+      comDrift.next=t+interval;
+      var amp=2.0+7.0*ADHD*variability+5.0*MANIA;
+      comDrift.tx=(rand(Math.floor(t*91)+7)-0.5)*2*amp;
+      comDrift.ty=(rand(Math.floor(t*77)+9)-0.5)*2*amp;
+    }
+    var k=0.06;
+    comDrift.x+=(comDrift.tx-comDrift.x)*k;
+    comDrift.y+=(comDrift.ty-comDrift.y)*k;
+    return {x:comDrift.x,y:comDrift.y};
+  }
+
+  var P={strideLen:44,stepW:22,toeOutDeg:2,toeNoiseDeg:0,placementJitter:0,bounce:8,armAmp:28,pitch:0.05,cadence:1.0,latSway:1.0};
+  function lp(cur,tgt,k){ return cur+(tgt-cur)*k; }
+
+  function updateFoot(which,ph,baseStride,stepW,placementJitter,variability,strideMul){
+    var st=footState[which];
+    var isLeft=(which==="L");
+    var sideSign=isLeft?-1:+1;
+    var inStance=ph<0.5;
+    if(inStance&&!st.wasInStance){
+      st.stepX=st.nextX;
+      st.nextX=st.stepX+baseStride*strideMul;
+      st.laneY=st.nextLaneY;
+      var sharedSeed=Math.floor((st.stepX+1000)/44);
+      var n=(rand(sharedSeed*31+101)-0.5)*2;
+      var laneNoise=n*placementJitter*variability;
+      st.nextLaneY=sideSign*(stepW*0.5)+laneNoise;
+      st.planted=null;
+    }
+    st.wasInStance=inStance;
+    var cur={X:st.stepX,Y:st.laneY,Z:0};
+    var next={X:st.nextX,Y:st.nextLaneY,Z:0};
+    if(inStance){
+      if(!st.planted) st.planted={X:cur.X,Y:cur.Y,Z:cur.Z};
+      return {pos:st.planted,swing:0,inStance:true};
+    }else{
+      var u=(ph-0.5)/0.5, uu=ease(u);
+      var start=st.planted?st.planted:cur;
+      var pos={X:lerp(start.X,next.X,uu),Y:lerp(start.Y,next.Y,uu),Z:0};
+      return {pos:pos,swing:u,inStance:false};
+    }
+  }
+
+  var armDyn={L:{ang:0,vel:0},R:{ang:0,vel:0},roll:{ang:0,vel:0}};
+  function stepSpring(state,target,dt,w,zeta){
+    var a=(w*w)*(target-state.ang)-(2*zeta*w)*state.vel;
+    state.vel+=a*dt; state.ang+=state.vel*dt; return state.ang;
+  }
+  function stepSpeedPulse(t,phaseBias,ADHD,variability){
+    var phL0=(t%1.0), phR0=((t+0.5+phaseBias)%1.0);
+    var sigmaS=0.055,sigmaM=0.070;
+    var dS_L=Math.min(phL0,1-phL0), dS_R=Math.min(phR0,1-phR0);
+    var gS=Math.exp(-pow2(dS_L/sigmaS))+Math.exp(-pow2(dS_R/sigmaS));
+    var gM=Math.exp(-pow2((phL0-0.25)/sigmaM))+Math.exp(-pow2((phR0-0.25)/sigmaM));
+    var baseS=0.212,baseM=0.248;
+    var amp=0.11*ADHD*variability;
+    var stepSpeed=1+amp*(0.65*(gS-baseS)+0.35*(gM-baseM));
+    return clamp(stepSpeed,0.88,1.14);
+  }
+  function toeSpring(ph){
+    if(ph>=0.5) return 0;
+    var s=ph/0.5;
+    var comp=Math.exp(-pow2((s-0.28)/0.18));
+    var reb=Math.exp(-pow2((s-0.78)/0.12));
+    return (-0.85*comp+1.05*reb);
+  }
+
+  var trailHistory=[], trailMaxLen=30;
+  var t=0,scroll=0,stepIndex=0;
+  var metricTick=0;
+
+  function frame(){
+    try{
+      var dims=ensureCanvasSize();
+      cW=dims.w; cH=dims.h; updateOrigin();
+      var _err=$('err'); if(_err)_err.textContent='';
+      requestAnimationFrame(frame);
+    }catch(e){
+      var el=$('err'); if(el) el.textContent='Render error: '+(e&&e.stack?e.stack:e); return;
+    }
+
+    var ASD=+sliders.asd.value,ADHD=+sliders.adhd.value,ANX=+sliders.anx.value,DEP=+sliders.dep.value;
+    var MANIA=+sliders.mania.value,DISSOC=+sliders.dissoc.value;
+    var Arousal=+sliders.arousal.value,Conf=+sliders.conf.value,Agg=+sliders.agg.value;
+
+    var cartoon=(styleSel.value==="toon")?1:0;
+    var EX=lerp(1.0,1.75,cartoon);
+
+    var toeWalk=smoothstep(0.62,0.84,ASD);
+    var variability=clamp(0.18*ASD+0.45*ADHD+0.30*ANX+0.10*DEP+0.35*MANIA-0.30*DISSOC,0,1);
+
+    var strideT=44,stepWT=22,toeOutT=2,toeNoiseT=0,placeJitT=0;
+    var bounceT=8,armAmpT=28,pitchT=0.05,cadenceT=1.0,latSwayT=1.0;
+
+    // Arousal — psychomotor activation scales energy
+    cadenceT*=lerp(0.90,1.30,Arousal);
+    bounceT+=lerp(-2,+6,Arousal);
+    armAmpT+=lerp(-2,+10,Arousal);
+
+    // Confidence / dominance — expansive & upright
+    strideT+=lerp(-12,+30,Conf);
+    pitchT+=lerp(+0.20,-0.20,Conf);
+    stepWT+=lerp(+4,-4,Conf);
+    bounceT+=lerp(-2,+4,Conf);
+    armAmpT+=lerp(-4,+10,Conf);
+
+    // Aggression — upper-body swagger, toe-out, drive (Satchell 2017)
+    toeOutT+=lerp(0,+18,Agg);
+    armAmpT+=lerp(0,+4,Agg);
+    cadenceT*=lerp(1.0,1.16,Agg);
+    pitchT+=lerp(0,-0.03,Agg);
+
+    // ASD — wider base, toe-out, reduced arm, more sway (Kindregan 2015)
+    stepWT+=lerp(0,+14,ASD);
+    toeOutT+=lerp(0,+10,ASD);
+    pitchT+=lerp(0,+0.22*EX,ASD);
+    armAmpT*=lerp(1.0,0.82,ASD);
+    latSwayT+=lerp(0,0.5,ASD);
+
+    // Depression — slow, reduced arm, slumped, low bounce, more lateral sway (Michalak 2009)
+    cadenceT*=lerp(1.0,0.68,DEP);
+    bounceT*=lerp(1.0,0.42,DEP);
+    armAmpT*=lerp(1.0,0.45,DEP);
+    strideT*=lerp(1.0,0.78,DEP);
+    pitchT+=lerp(0,0.18,DEP);
+    toeNoiseT+=lerp(0,6,DEP);
+    latSwayT+=lerp(0,0.8,DEP);
+
+    // Anxiety — cautious, shorter, stiffer, wider; jitter when keyed-up
+    strideT*=lerp(1.0,0.80,ANX);
+    stepWT+=lerp(0,+10,ANX);
+    armAmpT*=lerp(1.0,0.62,ANX);
+    bounceT*=lerp(1.0,0.70,ANX);
+    pitchT+=lerp(0,0.14,ANX);
+    placeJitT+=lerp(0,12,ANX);
+    cadenceT*=lerp(1.0,1.18,ANX);
+
+    // ADHD — variability, restlessness
+    toeNoiseT+=lerp(0,10,ADHD);
+    placeJitT+=lerp(0,8,ADHD);
+    armAmpT+=lerp(0,6,ADHD);
+
+    // Mania — fast, expansive, energetic, upright/open
+    cadenceT*=lerp(1.0,1.40,MANIA);
+    strideT+=lerp(0,+22,MANIA);
+    armAmpT+=lerp(0,+16,MANIA);
+    bounceT+=lerp(0,+10,MANIA);
+    pitchT+=lerp(0,-0.12,MANIA);
+    placeJitT+=lerp(0,6,MANIA);
+    toeNoiseT+=lerp(0,5,MANIA);
+
+    // Dissociation — flat, mechanical, damped
+    bounceT*=lerp(1.0,0.30,DISSOC);
+    armAmpT*=lerp(1.0,0.35,DISSOC);
+    cadenceT*=lerp(1.0,0.88,DISSOC);
+    placeJitT*=lerp(1.0,0.15,DISSOC);
+    toeNoiseT*=lerp(1.0,0.10,DISSOC);
+    latSwayT*=lerp(1.0,0.4,DISSOC);
+    strideT=lerp(strideT,40,DISSOC*0.6);
+
+    // Toe-walk compensation
+    var bodyLift=12*toeWalk*EX, hipDrop=8*toeWalk*EX, kneeExtra=18*toeWalk*EX;
+    strideT*=(1-0.16*toeWalk);
+    bounceT+=14*toeWalk*EX;
+
+    stepWT=clamp(stepWT,14,36);
+    strideT=clamp(strideT,30,68);
+    pitchT=clamp(pitchT,-0.10,0.30);
+
+    var dt=0.020,kFast=0.08,kSlow=0.04;
+    P.strideLen=lp(P.strideLen,strideT,kSlow);
+    P.stepW=lp(P.stepW,stepWT,kSlow);
+    P.toeOutDeg=lp(P.toeOutDeg,toeOutT*EX,kSlow);
+    P.toeNoiseDeg=lp(P.toeNoiseDeg,toeNoiseT,kFast);
+    P.placementJitter=lp(P.placementJitter,placeJitT,kFast);
+    P.bounce=lp(P.bounce,bounceT,kSlow);
+    P.armAmp=lp(P.armAmp,armAmpT*EX,kSlow);
+    P.pitch=lp(P.pitch,pitchT,kSlow);
+    P.cadence=lp(P.cadence,cadenceT,kSlow);
+    P.latSway=lp(P.latSway,latSwayT,kSlow);
+
+    var nv=updateNoise(t,ADHD+0.5*MANIA,variability);
+    var stepSpeed=stepSpeedPulse(t,nv.phaseBias,ADHD,variability);
+    stepSpeed=lerp(stepSpeed,1.0,DISSOC*0.8);
+    t+=dt*P.cadence*nv.timeMul*stepSpeed;
+
+    var phL=(t%1.0), phR=((t+0.5+nv.phaseBias)%1.0);
+    var fL=updateFoot("L",phL,P.strideLen,P.stepW,P.placementJitter,variability,nv.strideMul);
+    var fR=updateFoot("R",phR,P.strideLen,P.stepW,P.placementJitter,variability,nv.strideMul);
+
+    var camX=(fL.pos.X+fR.pos.X)*0.5;
+    scroll+=dt*P.cadence*(P.strideLen*1.6);
+
+    var phase=t, gaitPhase=Math.sin(t*Math.PI*2);
+    stepIndex=Math.floor(t*2);
+    var twistAmp=(0.10+0.30*Agg+0.12*MANIA)*(1.0-0.72*ASD)*(1.0-0.35*ANX)*(1.0-0.60*DISSOC);
+    var pelvisTwist=-gaitPhase*twistAmp*8*EX;
+    var shoulderTwist=+gaitPhase*twistAmp*(12+32*Agg)*EX;
+
+    var sway=gaitPhase*(6+10*variability+6*ASD)*EX*(1.0-0.50*DISSOC)*P.latSway;
+    var pelvBounce=Math.abs(gaitPhase)*(6+P.bounce*0.35);
+
+    var drift=updateComDrift(t,ADHD,MANIA,variability);
+    drift.x*=(1.0-0.7*DISSOC); drift.y*=(1.0-0.7*DISSOC);
+
+    var toeB=toeWalk*EX*(toeSpring(phL)+toeSpring(phR));
+    var pelvis={X:drift.x*0.35+6*ASD*EX,Y:sway+drift.y,Z:150+pelvBounce+bodyLift-hipDrop+10*toeB};
+
+    var hipW=34,shW=54;
+    var hipL={X:pelvis.X+pelvisTwist,Y:pelvis.Y-hipW*0.5,Z:pelvis.Z};
+    var hipR={X:pelvis.X-pelvisTwist,Y:pelvis.Y+hipW*0.5,Z:pelvis.Z};
+
+    var ftL={X:fL.pos.X-camX,Y:fL.pos.Y,Z:(Math.sin(Math.PI*clamp(fL.swing,0,1))*24)+(toeWalk*4)*(fL.inStance?1:0)+(fL.inStance?(toeWalk*8*EX+4*toeWalk*EX*toeSpring(phL)):0)};
+    var ftR={X:fR.pos.X-camX,Y:fR.pos.Y,Z:(Math.sin(Math.PI*clamp(fR.swing,0,1))*24)+(toeWalk*4)*(fR.inStance?1:0)+(fR.inStance?(toeWalk*8*EX+4*toeWalk*EX*toeSpring(phR)):0)};
+
+    var maxSep=0.72*P.stepW+18;
+    var sep=Math.abs(ftR.Y-ftL.Y);
+    if(sep>maxSep){ var mid=(ftR.Y+ftL.Y)*0.5,half=maxSep*0.5; ftL.Y=mid-half; ftR.Y=mid+half; }
+
+    function knee(hip,ankle,isLeft,swingU){
+      var side=isLeft?-1:+1, u=clamp(swingU,0,1);
+      var liftCore=Math.sin(Math.PI*u);
+      var THIGH=92,SHIN=94;
+      var ik=kneeIK2D(hip,{X:ankle.X,Z:ankle.Z},THIGH,SHIN);
+      var dx=ankle.X-hip.X,dz=ankle.Z-hip.Z;
+      var d=Math.sqrt(dx*dx+dz*dz); if(d<1e-6)d=1e-6;
+      var ux=dx/d,uz=dz/d;
+      var along=(THIGH/(THIGH+SHIN))*d;
+      var extX=hip.X+ux*along+6*ux, extZ=hip.Z+uz*along+6*uz;
+      var ky=lerp(hip.Y,ankle.Y,0.55)+side*(10+4*toeWalk);
+      var bendW=0.15+0.85*u;
+      var kx=lerp(extX,ik.X,bendW), kz=lerp(extZ,ik.Z,bendW);
+      var swingLift=liftCore*(8+10*u);
+      return {X:kx,Y:ky,Z:kz+kneeExtra*0.10+swingLift};
+    }
+    var kneeL=knee(hipL,ftL,true,fL.swing);
+    var kneeR=knee(hipR,ftR,false,fR.swing);
+
+    var pitch=P.pitch;
+    var pitchPos=(pitch>0)?1:0;
+    var pelvisPitch=pitch*(pitchPos?0.60:0.18);
+    var chestPitch=pitch*(pitchPos?1.15:1.55);
+    var chestRig=(1.0-0.35*ASD)*(1.0-0.40*DISSOC);
+    chestPitch*=chestRig;
+    var chestOpen=(-0.30*Conf-0.16*Agg-0.10*MANIA)*EX;
+    chestPitch+=chestOpen;
+    var trunkDynAmp=0.055*(0.55+0.75*Arousal+0.40*MANIA)*(1.0-0.70*ASD)*(1.0-0.60*DISSOC);
+    var trunkDyn=Math.sin((phase*2*Math.PI)+0.6)*trunkDynAmp;
+    chestPitch+=trunkDyn;
+
+    var lowerTorso={X:pelvis.X+pelvisPitch*38,Y:pelvis.Y,Z:pelvis.Z+82};
+    var chest={X:lowerTorso.X+chestPitch*34,Y:lowerTorso.Y,Z:lowerTorso.Z+62};
+
+    var asdWobble=(rand(Math.floor(t*1.3)+771)-0.5)*2;
+    var asdStepJ=(rand(stepIndex*17+93)-0.5)*2;
+    var trunkSway=(0.55*asdWobble+0.45*asdStepJ)*(6.0*ASD)*(1.0-0.35*Conf)*(1.0-0.50*DISSOC);
+    // depression lateral upper-body sway (Michalak): add a smooth low-freq sway to chest
+    var depSway=Math.sin(phase*Math.PI*2*0.5+1.1)*(7*DEP)*(1.0-0.5*DISSOC);
+    lowerTorso.Y+=trunkSway*0.55+depSway*0.4;
+    chest.Y+=trunkSway+depSway;
+
+    var headTiltT=(-0.06*Conf-0.04*Agg-0.06*MANIA+0.18*DEP+0.14*ANX)*EX;
+    var headJit=(rand(Math.floor(t*120)+333)-0.5)*2*(0.06*(ADHD+0.4*MANIA)*variability);
+    headJit*=(1.0-0.80*DISSOC);
+    var headTilt=clamp((headTiltT+headJit)*1.55,-0.35,0.38);
+
+    var neck={X:chest.X+headTilt*20,Y:chest.Y,Z:chest.Z+42};
+    var head={X:neck.X+headTilt*14,Y:neck.Y,Z:neck.Z+26};
+    head.Y+=trunkSway*0.75+depSway*0.8; neck.Y+=trunkSway*0.45+depSway*0.5;
+
+    var shL={X:chest.X+shoulderTwist,Y:chest.Y-shW*0.5,Z:chest.Z};
+    var shR={X:chest.X-shoulderTwist,Y:chest.Y+shW*0.5,Z:chest.Z};
+
+    var swagger=gaitPhase*(6+10*Agg+4*MANIA)*EX*(1.0-0.50*DISSOC);
+    var baseArm=Math.sin(t*Math.PI*2);
+    var wobble=(rand(Math.floor(t*60)+33)-0.5)*2*(0.35*(ADHD+0.3*MANIA))*variability;
+    var targetSwing=baseArm+wobble;
+    var armScale=(P.armAmp/30)*(1.0-0.25*ANX)*(1.0-0.20*ASD);
+    var targL=(+targetSwing)*armScale, targR=(-targetSwing)*armScale;
+
+    var ww=10+6*ADHD, zeta=0.85-0.45*ADHD;
+    ww=lerp(ww,14,DISSOC*0.6); zeta=lerp(zeta,0.95,DISSOC*0.7);
+    var angL=stepSpring(armDyn.L,targL,dt,ww,zeta);
+    var angR=stepSpring(armDyn.R,targR,dt,ww,zeta);
+    var rollT=(targetSwing*0.12)*(0.8+0.4*ADHD)*(1.0-0.65*ASD)*(1.0-0.50*DISSOC);
+    var roll=stepSpring(armDyn.roll,rollT,dt,8+4*ADHD,0.9);
+
+    function arm(sideSign,shoulder,ang){
+      var u=ang, swing=u*(32+18*(1-0.6*Agg));
+      var up=Math.abs(u)*(10+6*ADHD+4*MANIA)*(1-0.5*DEP);
+      var hand={X:shoulder.X+42+swing*0.55,Y:shoulder.Y+(-16*sideSign)+swagger*0.22*sideSign,Z:shoulder.Z-94+up+roll*14};
+      var minHandX=shoulder.X-8; if(hand.X<minHandX) hand.X=minHandX;
+      var e=armIK2D(shoulder,hand,44,42);
+      var elbow={X:e.X,Y:shoulder.Y+(-10*sideSign)+swagger*0.12*sideSign,Z:e.Z+roll*8};
+      return {elbow:elbow,hand:hand};
+    }
+    var armFar=arm(-1,shL,angL);
+    var armNear=arm(+1,shR,angR);
+
+    function footAngle(isLeft,seed){
+      var side=isLeft?-1:+1;
+      var base=deg2rad(P.toeOutDeg*side);
+      var n=(rand(seed)-0.5)*2;
+      var jitter=deg2rad(P.toeNoiseDeg*n*variability);
+      return base+jitter;
+    }
+    var thetaL=footAngle(true,footState.L.stepX*0.01+11);
+    var thetaR=footAngle(false,footState.R.stepX*0.01+71);
+
+    function liftPx(u){ var hump=Math.sin(Math.PI*clamp(u,0,1)); var fade=1-smoothstep(0.86,1.0,u); return (hump*fade)*14; }
+    var liftL=liftPx(fL.swing), liftR=liftPx(fR.swing);
+
+    // ---- DRAW ----
+    drawGround(scroll,{w:cW,h:cH});
+    var farColor="rgba(160,175,220,0.5)", nearColor="rgba(228,232,245,0.94)", jointColor="rgba(108,122,238,0.8)";
+
+    if(showTrail.checked){
+      var headS=toScreen(head);
+      trailHistory.push({x:headS.x,y:headS.y});
+      if(trailHistory.length>trailMaxLen) trailHistory.shift();
+      if(trailHistory.length>2){
+        ctx.save(); ctx.lineCap='round';
+        for(var ti=1;ti<trailHistory.length;ti++){
+          ctx.globalAlpha=(ti/trailHistory.length)*0.3;
+          ctx.strokeStyle="rgba(108,122,238,0.6)"; ctx.lineWidth=2;
+          ctx.beginPath(); ctx.moveTo(trailHistory[ti-1].x,trailHistory[ti-1].y); ctx.lineTo(trailHistory[ti].x,trailHistory[ti].y); ctx.stroke();
+        }
+        ctx.restore();
+      }
+    }else{ trailHistory=[]; }
+
+    var pelS=toScreen({X:pelvis.X,Y:pelvis.Y,Z:0});
+    ctx.save(); ctx.fillStyle="rgba(0,0,0,0.16)"; ctx.beginPath(); ctx.ellipse(pelS.x,groundY+8,65,12,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+
+    var skeletonMode=showSkeleton.checked;
+    drawLimb(toScreen(hipL),toScreen(hipR),4,0.70,nearColor);
+    drawLimb(toScreen(pelvis),toScreen(lowerTorso),5,0.9,nearColor);
+    drawLimb(toScreen(lowerTorso),toScreen(chest),5,0.9,nearColor);
+    drawLimb(toScreen(chest),toScreen(neck),4,0.9,nearColor);
+    drawLimb(toScreen(shL),toScreen(shR),4,0.75,nearColor);
+
+    var hs=toScreen(head);
+    ctx.save(); ctx.strokeStyle=nearColor; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.arc(hs.x,hs.y,13,0,Math.PI*2); ctx.stroke();
+    var ct=Math.cos(headTilt),st2=Math.sin(headTilt);
+    var eyeX=6.5*ct-(-2.5)*st2, eyeY=6.5*st2+(-2.5)*ct;
+    ctx.fillStyle=nearColor; ctx.beginPath(); ctx.arc(hs.x+eyeX,hs.y+eyeY,2.2,0,Math.PI*2); ctx.fill(); ctx.restore();
+
+    drawLimb(toScreen(shL),toScreen(armFar.elbow),3,0.45,farColor);
+    drawLimb(toScreen(armFar.elbow),toScreen(armFar.hand),3,0.45,farColor);
+    drawLimb(toScreen(shR),toScreen(armNear.elbow),4,0.85,nearColor);
+    drawLimb(toScreen(armNear.elbow),toScreen(armNear.hand),4,0.85,nearColor);
+
+    drawLimb(toScreen(hipL),toScreen(kneeL),3,0.45,farColor);
+    drawLimb(toScreen(kneeL),toScreen(ftL),3,0.45,farColor);
+    drawLimb(toScreen(hipR),toScreen(kneeR),4,0.85,nearColor);
+    drawLimb(toScreen(kneeR),toScreen(ftR),4,0.85,nearColor);
+
+    drawFoot(ftL,thetaL,64,liftL,0.45,farColor,toeWalk,fL.inStance);
+    drawFoot(ftR,thetaR,64,liftR,0.85,nearColor,toeWalk,fR.inStance);
+
+    if(skeletonMode){
+      var joints=[pelvis,lowerTorso,chest,neck,hipL,hipR,kneeL,kneeR,ftL,ftR,shL,shR,armFar.elbow,armFar.hand,armNear.elbow,armNear.hand];
+      for(var ji=0;ji<joints.length;ji++){ drawJoint(toScreen(joints[ji]),3,jointColor,0.85); }
+    }
+
+    // info chips (real-ish derived values)
+    // map sim params to plausible real-world units
+    var speedMS=(P.cadence*P.strideLen/44)*1.35; // ~1.35 m/s baseline
+    var cadenceSPM=P.cadence*112; // steps/min approx
+    var strideM=(P.strideLen/44)*1.42;
+    $("chipSpeed").textContent="speed: "+speedMS.toFixed(2)+" m/s";
+    $("chipCadence").textContent="cadence: "+Math.round(cadenceSPM)+" spm";
+    $("chipStride").textContent="stride: "+strideM.toFixed(2)+" m";
+    $("chipVar").textContent="variability: "+(variability*100).toFixed(0)+"%";
+
+    // metrics panel (throttled)
+    metricTick++;
+    if(metricTick%4===0){
+      setMetric("Speed", speedMS, 0.4, 1.8, "fSpeed","mSpeed",speedMS.toFixed(2)+" m/s");
+      setMetric("Cad", cadenceSPM, 70, 150, "fCad","mCad",Math.round(cadenceSPM)+" spm");
+      setMetric("Stride", strideM, 0.8, 1.9, "fStride","mStride",strideM.toFixed(2)+" m");
+      var widthCm=(P.stepW/22)*11;
+      setMetric("Width", widthCm, 6, 20, "fWidth","mWidth",widthCm.toFixed(1)+" cm");
+      var armPct=clamp(P.armAmp/52,0,1)*100;
+      setMetric("Arm", armPct, 0, 100, "fArm","mArm",Math.round(armPct)+"%");
+      var leanDeg=clamp(P.pitch,-0.1,0.3)*40;
+      setMetric("Pitch", leanDeg, -4, 12, "fPitch","mPitch",leanDeg.toFixed(1)+"°");
+      setMetric("Var", variability*100, 0, 100, "fVar","mVar",Math.round(variability*100)+"%");
+    }
+  }
+
+  function setMetric(name,val,min,max,fillId,valId,label){
+    var pct=clamp((val-min)/(max-min),0,1)*100;
+    var f=$(fillId); if(f) f.style.width=pct.toFixed(0)+"%";
+    var v=$(valId); if(v) v.textContent=label;
+  }
+
+  frame();
+})();
+</script>
+</body>
+</html>
