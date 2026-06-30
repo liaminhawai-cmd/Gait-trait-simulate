@@ -36,17 +36,28 @@ Each trait→gait mapping is tagged so the science isn't overstated:
 
 ### Key sources
 
+All citations below were checked against the published record (PubMed / journal
+pages) during a verification pass.
+
 - **Depression** *(strong)* — Michalak et al. (2009), *Psychosomatic Medicine*
-  71:580–587; Lemke et al. (2000).
-- **Autism (ASD)** *(moderate)* — Kindregan, Gallagher & Gormley (2015);
-  Hallett et al. (1993); Nayate et al.
-- **ADHD** *(moderate)* — Manicolo et al. (2017); Papadopoulos et al. (2014).
-- **Anxiety** *(moderate)* — Staab (2012); Feldman et al. (2019); cautious-gait
-  literature.
-- **Aggression / Confidence** *(moderate)* — Satchell et al. (2017),
-  *J. Nonverbal Behavior* 41:35–44.
+  71(5):580–587; Lemke et al. (2000), *J. Psychiatric Research* 34(4-5):277–283.
+- **Autism (ASD)** *(moderate)* — Kindregan, Gallagher & Gormley (2015),
+  *Autism Research and Treatment* (art. 741480); Hallett et al. (1993),
+  *Arch. Neurology* 50(12):1304–1308. *(Note: Hallett found largely normal
+  spatiotemporal gait with atypical upper-limb posturing; increased step width
+  and toe-walking are reported in subsets, not universally.)*
+- **ADHD** *(moderate)* — Manicolo, Grob & Hagmann-von Arx (2017),
+  *Frontiers in Psychology* 8:34 (higher baseline stride-time variability;
+  dual-task cost similar to controls).
+- **Anxiety** *(moderate)* — anxiety vs. controls gait study (*Gait & Posture*,
+  2019); trait/state anxiety & gait (*Experimental Brain Research*, 2024);
+  cautious-gait / phobic-postural-vertigo concept (Staab 2012, *Continuum*).
+- **Aggression / Confidence** *(moderate)* — Satchell et al. (2017), *Evidence of
+  Big Five and Aggressive Personalities in Gait Biomechanics*,
+  *J. Nonverbal Behavior* 41:35–44 (thorax/pelvis movement magnitude + speed).
 - **Mania** *(emerging)* — DSM-5 psychomotor activation; actigraphy.
-- **Dissociation** *(speculative)* — embodiment / depersonalization theory.
+- **Dissociation** *(speculative)* — embodiment / depersonalization theory; no
+  validated quantitative gait dataset.
 
 Full citations are shown inside the app's Evidence panel.
 

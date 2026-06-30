@@ -306,54 +306,53 @@
   var EVIDENCE = {
     asd:{
       title:"Autism (ASD)", strength:"moderate",
-      summary:"Studies of autistic walkers fairly consistently report a less stable, more variable gait with a wider base of support, plus a meaningfully elevated rate of toe-walking. Effects are clearest in children and grow with motor-coordination differences.",
+      summary:"Findings are heterogeneous. Reviews report a less stable, more variable gait with reduced stride length and an elevated rate of toe-walking, but some controlled studies (e.g. Hallett 1993) found largely normal spatiotemporal gait with atypical upper-limb posturing. Effects are clearest in children and scale with motor-coordination differences.",
       features:[
-        ["var","Higher stride-to-stride variability"],
-        ["up","Wider base of support (step width)"],
-        ["down","Shorter stride length & slower speed"],
+        ["var","Higher stride-to-stride variability (reviews)"],
+        ["up","Wider base of support (reported in subsets)"],
+        ["down","Shorter stride length & slower speed (subsets)"],
         ["up","Toe-walking / reduced heel strike (subset)"],
-        ["down","Reduced & atypical arm swing, more trunk sway"]
+        ["down","Atypical upper-limb posture, reduced arm swing"]
       ],
       refs:[
-        "Kindregan, Gallagher & Gormley (2015). Gait deviations in children with ASD: a review. Autism Res Treat.",
-        "Hallett et al. (1993). Locomotion of autistic adults. Arch Neurol.",
-        "Nayate et al. (2012); Calhoun et al. (2011) — increased gait variability & step width."
+        "Kindregan, Gallagher & Gormley (2015). Gait deviations in children with ASD: a review. Autism Research and Treatment, art. 741480.",
+        "Hallett et al. (1993). Locomotion of autistic adults. Arch Neurol 50(12):1304-1308 — atypical upper-limb posturing; otherwise largely normal spatiotemporal gait.",
+        "Note: increased step width, reduced stride and toe-walking appear in subsets, not universally."
       ]
     },
     adhd:{
       title:"ADHD", strength:"moderate",
-      summary:"The most replicated ADHD gait finding is increased step-to-step variability and reduced stride regularity, amplified under dual-task (walking while thinking). It looks less like a fixed posture and more like an inconsistent, fidgety, wandering rhythm.",
+      summary:"The most replicated ADHD gait finding is increased stride-to-stride timing variability: children with ADHD walked with higher stride-time variability than peers even during ordinary walking (Manicolo 2017). That study found dual-task costs were similar to controls, so the signal is baseline rhythmic inconsistency rather than a special dual-task penalty.",
       features:[
-        ["var","Increased stride-time & step-length variability"],
-        ["var","Reduced rhythmic consistency, esp. dual-task"],
+        ["var","Higher stride-time variability (less rhythmic consistency)"],
+        ["var","Step-to-step inconsistency rather than a fixed posture"],
         ["up","More extraneous / restless body movement"],
         ["var","Less stable centre-of-mass control"]
       ],
       refs:[
-        "Manicolo et al. (2017). Gait variability in children with ADHD. Gait & Posture.",
-        "Papadopoulos et al. (2014). Motor proficiency & gait in ADHD.",
-        "Leitner et al. (2007) — dual-task gait cost in ADHD."
+        "Manicolo, Grob & Hagmann-von Arx (2017). Gait in children with ADHD in a dual-task paradigm. Frontiers in Psychology 8:34 — higher stride-time variability vs. peers; similar dual-task cost.",
+        "Broader reviews link ADHD to motor-coordination differences and increased movement variability (findings heterogeneous)."
       ]
     },
     anx:{
       title:"Anxiety", strength:"moderate",
-      summary:"Anxiety and threat tend to produce a 'cautious' or guarded gait: slower, shorter, stiffer steps with tighter trunk control and reduced gait flexibility — the body bracing as if the ground were less safe. High state anxiety can also raise step-timing variability.",
+      summary:"Anxiety and threat produce a 'cautious' or guarded gait: slower walking, shorter steps, fewer steps per minute, longer double-support, and stiffer trunk control — the body bracing as if the ground were less safe. High state anxiety can also raise step-placement variability. (Use the Arousal slider for the keyed-up speeding-up effect.)",
       features:[
         ["down","Slower speed, shorter steps (cautious gait)"],
-        ["up","Increased double-support / guardedness"],
-        ["down","Reduced arm swing & trunk rotation (stiffening)"],
-        ["var","More step-placement variability when keyed-up"],
-        ["up","Slightly faster, tense cadence under arousal"]
+        ["up","Longer double-support time (guardedness)"],
+        ["down","Fewer steps per minute & reduced stride"],
+        ["down","Reduced arm swing / trunk rotation (stiffening)"],
+        ["var","More step-placement variability under threat"]
       ],
       refs:[
-        "Staab (2012). Chronic subjective dizziness / functional gait. Continuum.",
-        "Feldman et al. (2019). Anxiety & cautious gait. Gait & Posture.",
-        "Brandt (1996); Schaefer et al. — anxiety, threat & guarded locomotion."
+        "Gait, balance & mobility in people with anxiety vs. controls (Gait & Posture, 2019) — slower speed, shorter steps, fewer steps/min, more double-support.",
+        "Effects of trait & state anxiety on gait in healthy young adults (Experimental Brain Research, 2024) — higher trait anxiety → slower gait & longer double-support under threat.",
+        "Cautious-gait / phobic postural vertigo concept (Brandt & Dieterich 1986; Staab 2012, Continuum 18(5):1118-41)."
       ]
     },
     dep:{
       title:"Depression", strength:"strong",
-      summary:"This is one of the best-established trait→gait links. In Michalak et al.'s motion-capture work, dysphoric/depressed mood produced reduced walking speed, markedly reduced arm swing, a slumped (forward-flexed) posture, less vertical bounce, and increased lateral upper-body sway.",
+      summary:"This is one of the best-established trait→gait links. In Michalak et al.'s motion-capture work, dysphoric/depressed mood produced reduced walking speed, markedly reduced arm swing, a slumped (forward-flexed) posture, less vertical bounce, and increased lateral upper-body sway. Lemke's spatiotemporal study independently found slower gait, shorter strides and increased lateral sway.",
       features:[
         ["down","Reduced walking speed & cadence"],
         ["down","Markedly reduced arm swing"],
@@ -362,9 +361,9 @@
         ["up","Increased lateral upper-body swaying"]
       ],
       refs:[
-        "Michalak et al. (2009). Embodiment of sadness and depression — gait patterns associated with dysphoric mood. Psychosom Med, 71:580-587.",
-        "Lemke et al. (2000). Spatiotemporal gait in major depression. J Psychiatr Res.",
-        "Sloman et al. (1982) — early gait-and-depression observations."
+        "Michalak et al. (2009). Embodiment of sadness and depression — gait patterns associated with dysphoric mood. Psychosom Med, 71(5):580-587.",
+        "Lemke et al. (2000). Spatiotemporal gait patterns during overground locomotion in major depression. J Psychiatr Res 34(4-5):277-283 — slower gait, shorter strides, increased lateral sway & double-support.",
+        "Replicated across motion-capture and spatiotemporal studies — among the strongest trait–gait links."
       ]
     },
     mania:{
@@ -422,24 +421,24 @@
         ["down","Narrower, more committed base of support"]
       ],
       refs:[
-        "Satchell et al. (2017). Big Five & aggression in gait biomechanics. J Nonverbal Behav.",
-        "Montepare & Zebrowitz (1988) — age/emotion & gait perception.",
-        "Power-posture causal claims remain debated (Ranehill et al. 2015)."
+        "Satchell et al. (2017). Evidence of Big Five and Aggressive Personalities in Gait Biomechanics. J Nonverbal Behav 41:35-44 — trait–movement-magnitude links.",
+        "Montepare & Zebrowitz (1988) — emotion, age & gait perception.",
+        "Power-posture causal claims remain debated (Ranehill et al. 2015, Psych Science)."
       ]
     },
     agg:{
       title:"Aggression", strength:"moderate",
-      summary:"Satchell et al. (2017) found that trait aggression predicts exaggerated upper- and lower-body movement during walking — greater thoracic (shoulder) and pelvic rotation and a more emphatic, swaggering arm action. The hallmark here is upper-body swagger and toe-out.",
+      summary:"Satchell et al. (2017) used motion capture of 29 treadmill walkers and found that trait aggression and Big-Five traits related to the magnitude of upper-body (thorax) and lower-body (pelvis) movement, and to gait speed. The hallmark here is exaggerated upper-body rotation — an emphatic, swaggering walk.",
       features:[
-        ["up","Exaggerated shoulder/thorax rotation (swagger)"],
-        ["up","Greater pelvic rotation & arm emphasis"],
-        ["up","Increased toe-out angle"],
-        ["up","Faster, more driving cadence"]
+        ["up","Greater thoracic (upper-body) rotation — reads as swagger"],
+        ["up","Greater pelvic (lower-body) rotation"],
+        ["up","Gait speed relates to aggression / Big-Five traits"],
+        ["up","More emphatic, driving arm action (visualization)"]
       ],
       refs:[
-        "Satchell, Morris, Mills, O'Reilly, Marshman & Akehurst (2017). Evidence of Big Five & Aggression Personality Traits in Gait. J Nonverbal Behav, 41:35-44.",
-        "Troje (2002) — biological-motion encoding of personality/affect.",
-        "Gait-perception studies on dominance & threat."
+        "Satchell, Morris, Mills, O'Reilly, Marshman & Akehurst (2017). Evidence of Big Five and Aggressive Personalities in Gait Biomechanics. J Nonverbal Behav 41:35-44.",
+        "Troje (2002). Decomposing biological motion — encoding of person attributes. J Vision.",
+        "Note: the toe-out shown in the figure is a modelling choice, not a Satchell finding."
       ]
     }
   };
@@ -810,14 +809,16 @@
     toeNoiseT+=lerp(0,6,DEP);
     latSwayT+=lerp(0,0.8,DEP);
 
-    // Anxiety — cautious, shorter, stiffer, wider; jitter when keyed-up
+    // Anxiety — cautious gait (Gait&Posture 2019; Exp Brain Res 2024):
+    // slower, shorter, fewer steps/min, stiffer, wider; jitter under threat.
+    // Cadence is reduced, not raised — the Arousal slider handles "keyed-up" speed.
     strideT*=lerp(1.0,0.80,ANX);
     stepWT+=lerp(0,+10,ANX);
     armAmpT*=lerp(1.0,0.62,ANX);
     bounceT*=lerp(1.0,0.70,ANX);
     pitchT+=lerp(0,0.14,ANX);
     placeJitT+=lerp(0,12,ANX);
-    cadenceT*=lerp(1.0,1.18,ANX);
+    cadenceT*=lerp(1.0,0.92,ANX);
 
     // ADHD — variability, restlessness
     toeNoiseT+=lerp(0,10,ADHD);
