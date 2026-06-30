@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Evidence-Based Gait Trait Simulator</title>
+<title>實證步態特質模擬器</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -15,7 +15,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
+    font-family:'DM Sans','PingFang TC','Microsoft JhengHei','Noto Sans TC','Noto Sans CJK TC',sans-serif;background:var(--bg);color:var(--text);
     min-height:100vh;display:flex;flex-direction:column;align-items:center;
     padding:22px 16px 48px;line-height:1.5;
   }
@@ -137,16 +137,16 @@
 <body>
 
 <header>
-  <h1>Evidence-Based Gait Trait Simulator</h1>
-  <p>An interactive model of how psychological and neurodevelopmental traits relate to observable walking patterns. Each mapping is annotated with the gait-research literature it draws on — and an honest rating of how strong that evidence is.</p>
+  <h1>實證步態特質模擬器</h1>
+  <p>一個互動模型，呈現心理與神經發展特質如何對應到可觀察的步行型態。每一組對應都標註了所依據的步態研究文獻，並誠實標示該證據的強度。</p>
   <div class="pills">
     <span class="pill">v8.0</span>
-    <span class="pill">9 traits</span>
-    <span class="pill">cited literature</span>
-    <span class="pill">live metrics</span>
-    <span class="pill">IK + spring dynamics</span>
+    <span class="pill">9 種特質</span>
+    <span class="pill">文獻引用</span>
+    <span class="pill">即時指標</span>
+    <span class="pill">IK + 彈簧動力</span>
   </div>
-  <div style="margin-top:9px"><a href="index.zh-Hant.html" style="font-size:12px;color:var(--accent)">繁體中文</a></div>
+  <div style="margin-top:9px"><a href="index.html" style="font-size:12px;color:var(--accent)">English</a></div>
 </header>
 
 <div id="wrap">
@@ -154,29 +154,29 @@
   <div id="sidebar">
     <div class="card">
       <div class="collapsible-header" id="presetToggle">
-        <span class="card-title">Quick Presets</span>
+        <span class="card-title">快速預設</span>
         <span class="collapse-chevron open" id="presetChevron">&#9660;</span>
       </div>
       <div class="collapsible-body open" id="presetBody">
         <div class="preset-grid">
-          <button class="preset-btn" data-preset="baseline">Neutral baseline</button>
-          <button class="preset-btn" data-preset="highASD">Autistic gait</button>
+          <button class="preset-btn" data-preset="baseline">中性基準</button>
+          <button class="preset-btn" data-preset="highASD">自閉症步態</button>
           <button class="preset-btn" data-preset="highADHD">ADHD</button>
-          <button class="preset-btn" data-preset="anxious">Anxious</button>
-          <button class="preset-btn" data-preset="depressed">Depressed</button>
-          <button class="preset-btn" data-preset="manic">Manic</button>
-          <button class="preset-btn" data-preset="dissociated">Dissociated</button>
-          <button class="preset-btn" data-preset="confident">Confident</button>
-          <button class="preset-btn" data-preset="aggressive">Aggressive</button>
-          <button class="preset-btn" data-preset="combined">ASD + ADHD</button>
+          <button class="preset-btn" data-preset="anxious">焦慮</button>
+          <button class="preset-btn" data-preset="depressed">憂鬱</button>
+          <button class="preset-btn" data-preset="manic">躁症</button>
+          <button class="preset-btn" data-preset="dissociated">解離</button>
+          <button class="preset-btn" data-preset="confident">自信</button>
+          <button class="preset-btn" data-preset="aggressive">攻擊性</button>
+          <button class="preset-btn" data-preset="combined">自閉症 + ADHD</button>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Neurodevelopmental</div>
+      <div class="card-title">神經發展</div>
       <div class="row" data-trait="asd">
-        <div class="labelrow"><label for="asd">Autism (ASD)</label><span class="info" data-trait="asd">i</span></div>
+        <div class="labelrow"><label for="asd">自閉症（ASD）</label><span class="info" data-trait="asd">i</span></div>
         <output id="asdOut">0.30</output>
         <input id="asd" type="range" min="0" max="1" step="0.01" value="0.30">
       </div>
@@ -188,61 +188,61 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Affect &amp; State</div>
+      <div class="card-title">情緒與狀態</div>
       <div class="row" data-trait="anx">
-        <div class="labelrow"><label for="anx">Anxiety</label><span class="info" data-trait="anx">i</span></div>
+        <div class="labelrow"><label for="anx">焦慮</label><span class="info" data-trait="anx">i</span></div>
         <output id="anxOut">0.15</output>
         <input id="anx" type="range" min="0" max="1" step="0.01" value="0.15">
       </div>
       <div class="row" data-trait="dep">
-        <div class="labelrow"><label for="dep">Depression</label><span class="info" data-trait="dep">i</span></div>
+        <div class="labelrow"><label for="dep">憂鬱</label><span class="info" data-trait="dep">i</span></div>
         <output id="depOut">0.10</output>
         <input id="dep" type="range" min="0" max="1" step="0.01" value="0.10">
       </div>
       <div class="row" data-trait="mania">
-        <div class="labelrow"><label for="mania">Mania</label><span class="info" data-trait="mania">i</span></div>
+        <div class="labelrow"><label for="mania">躁症</label><span class="info" data-trait="mania">i</span></div>
         <output id="maniaOut">0.00</output>
         <input id="mania" type="range" min="0" max="1" step="0.01" value="0.00">
       </div>
       <div class="row" data-trait="dissoc">
-        <div class="labelrow"><label for="dissoc">Dissociation</label><span class="info" data-trait="dissoc">i</span></div>
+        <div class="labelrow"><label for="dissoc">解離</label><span class="info" data-trait="dissoc">i</span></div>
         <output id="dissocOut">0.00</output>
         <input id="dissoc" type="range" min="0" max="1" step="0.01" value="0.00">
       </div>
       <div class="row" data-trait="arousal">
-        <div class="labelrow"><label for="arousal">Arousal</label><span class="info" data-trait="arousal">i</span></div>
+        <div class="labelrow"><label for="arousal">喚起</label><span class="info" data-trait="arousal">i</span></div>
         <output id="arousalOut">0.50</output>
         <input id="arousal" type="range" min="0" max="1" step="0.01" value="0.50">
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Interpersonal</div>
+      <div class="card-title">人際</div>
       <div class="row" data-trait="conf">
-        <div class="labelrow"><label for="conf">Confidence</label><span class="info" data-trait="conf">i</span></div>
+        <div class="labelrow"><label for="conf">自信</label><span class="info" data-trait="conf">i</span></div>
         <output id="confOut">0.50</output>
         <input id="conf" type="range" min="0" max="1" step="0.01" value="0.50">
       </div>
       <div class="row" data-trait="agg">
-        <div class="labelrow"><label for="agg">Aggression</label><span class="info" data-trait="agg">i</span></div>
+        <div class="labelrow"><label for="agg">攻擊性</label><span class="info" data-trait="agg">i</span></div>
         <output id="aggOut">0.10</output>
         <input id="agg" type="range" min="0" max="1" step="0.01" value="0.10">
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Display</div>
-      <div class="toggle-row"><span>Style</span>
+      <div class="card-title">顯示</div>
+      <div class="toggle-row"><span>風格</span>
         <select id="styleSel">
-          <option value="real">Realistic</option>
-          <option value="toon">Exaggerated</option>
+          <option value="real">寫實</option>
+          <option value="toon">誇張</option>
         </select>
       </div>
-      <div class="toggle-row"><input id="showSkeleton" type="checkbox"/><label for="showSkeleton">Skeleton overlay</label></div>
-      <div class="toggle-row"><input id="showTrail" type="checkbox"/><label for="showTrail">Motion trail</label></div>
+      <div class="toggle-row"><input id="showSkeleton" type="checkbox"/><label for="showSkeleton">骨架疊加</label></div>
+      <div class="toggle-row"><input id="showTrail" type="checkbox"/><label for="showTrail">運動軌跡</label></div>
       <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn" id="resetBtn">Reset all</button>
-        <button class="btn" id="copyBtn">Copy settings</button>
+        <button class="btn" id="resetBtn">全部重設</button>
+        <button class="btn" id="copyBtn">複製設定</button>
       </div>
     </div>
   </div>
@@ -252,22 +252,22 @@
     <div id="canvasBox">
       <canvas id="c"></canvas>
       <div id="info-bar">
-        <span class="info-chip" id="chipSpeed">speed: --</span>
-        <span class="info-chip" id="chipCadence">cadence: --</span>
-        <span class="info-chip" id="chipStride">stride: --</span>
-        <span class="info-chip" id="chipVar">variability: --</span>
+        <span class="info-chip" id="chipSpeed">速度：--</span>
+        <span class="info-chip" id="chipCadence">步頻：--</span>
+        <span class="info-chip" id="chipStride">跨步：--</span>
+        <span class="info-chip" id="chipVar">變異度：--</span>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Live gait metrics</div>
-      <div class="metric"><div class="metric-head"><span class="mname">Gait speed</span><span class="mval" id="mSpeed">--</span></div><div class="metric-track"><div class="metric-fill" id="fSpeed"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Cadence</span><span class="mval" id="mCad">--</span></div><div class="metric-track"><div class="metric-fill" id="fCad"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Stride length</span><span class="mval" id="mStride">--</span></div><div class="metric-track"><div class="metric-fill" id="fStride"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Step width (base of support)</span><span class="mval" id="mWidth">--</span></div><div class="metric-track"><div class="metric-fill" id="fWidth"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Arm swing</span><span class="mval" id="mArm">--</span></div><div class="metric-track"><div class="metric-fill" id="fArm"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Trunk flexion (forward lean)</span><span class="mval" id="mPitch">--</span></div><div class="metric-track"><div class="metric-fill" id="fPitch"></div></div></div>
-      <div class="metric"><div class="metric-head"><span class="mname">Gait variability</span><span class="mval" id="mVar">--</span></div><div class="metric-track"><div class="metric-fill" id="fVar"></div></div></div>
+      <div class="card-title">即時步態指標</div>
+      <div class="metric"><div class="metric-head"><span class="mname">步行速度</span><span class="mval" id="mSpeed">--</span></div><div class="metric-track"><div class="metric-fill" id="fSpeed"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">步頻</span><span class="mval" id="mCad">--</span></div><div class="metric-track"><div class="metric-fill" id="fCad"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">跨步長度</span><span class="mval" id="mStride">--</span></div><div class="metric-track"><div class="metric-fill" id="fStride"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">步寬（支撐基底）</span><span class="mval" id="mWidth">--</span></div><div class="metric-track"><div class="metric-fill" id="fWidth"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">擺臂</span><span class="mval" id="mArm">--</span></div><div class="metric-track"><div class="metric-fill" id="fArm"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">軀幹前傾</span><span class="mval" id="mPitch">--</span></div><div class="metric-track"><div class="metric-fill" id="fPitch"></div></div></div>
+      <div class="metric"><div class="metric-head"><span class="mname">步態變異度</span><span class="mval" id="mVar">--</span></div><div class="metric-track"><div class="metric-fill" id="fVar"></div></div></div>
     </div>
   </div>
 
@@ -275,7 +275,7 @@
   <div id="evidencecol">
     <div class="card">
       <div id="evHead">
-        <span id="evTitle">Evidence</span>
+        <span id="evTitle">文獻依據</span>
         <span class="strength" id="evStrength"></span>
       </div>
       <div class="ev-tabs" id="evTabs"></div>
@@ -285,7 +285,7 @@
     </div>
     <div class="card">
       <div class="disclaimer">
-        <b>Read this first.</b> These are <b>group-level statistical associations</b> reported in research — averages across studied populations, not a way to diagnose or "read" any individual. Many effects are small, overlap heavily with typical gait, and depend on context, comorbidity and measurement method. This is an educational visualization, not a clinical instrument.
+        <b>請先閱讀。</b>這些是研究中報告的<b>群體層級統計關聯</b>——是研究族群的平均，並非診斷或「判讀」任何個人的方法。許多效果很小、與一般步態高度重疊，且取決於情境、共病與測量方式。這是教育性的視覺化呈現，並非臨床工具。
       </div>
     </div>
   </div>
@@ -306,145 +306,145 @@
      ========================================================= */
   var EVIDENCE = {
     asd:{
-      title:"Autism (ASD)", strength:"moderate",
-      summary:"Motor and gait differences are among the more commonly observed features of autism, and observers can often pick up on them — so the intuition that walking is an obvious cue is well-founded. What 'moderate' rates here is the SPECIFICITY of the quantitative signature: findings are heterogeneous. Reviews report a less stable, more variable gait with reduced stride length and an elevated rate of toe-walking, while some controlled studies (e.g. Hallett 1993) found largely normal spatiotemporal gait with atypical upper-limb posturing. Effects are clearest in children and scale with motor-coordination differences.",
+      title:"自閉症（ASD）", short:"自閉症", strength:"moderate",
+      summary:"運動與步態差異是自閉症較常被觀察到的特徵之一，旁觀者也常能察覺——因此「走路是明顯線索」的直覺是有根據的。這裡標為「中等」，指的是量化特徵的『特異性』：研究結果並不一致。回顧文獻指出步態較不穩定、變異較大、跨步較短，且墊腳尖（toe-walking）比例偏高；但部分對照研究（如 Hallett 1993）發現時空步態大致正常，僅上肢姿勢不典型。效果在兒童身上最明顯，並隨運動協調差異而增強。",
       features:[
-        ["var","Higher stride-to-stride variability (reviews)"],
-        ["up","Wider base of support (reported in subsets)"],
-        ["down","Shorter stride length & slower speed (subsets)"],
-        ["up","Toe-walking / reduced heel strike (subset)"],
-        ["down","Atypical upper-limb posture, reduced arm swing"]
+        ["var","跨步間變異較高（回顧文獻）"],
+        ["up","支撐基底較寬（見於部分族群）"],
+        ["down","跨步較短、速度較慢（部分族群）"],
+        ["up","墊腳尖／腳跟著地減少（部分族群）"],
+        ["down","上肢姿勢不典型、擺臂減少"]
       ],
       refs:[
         "Kindregan, Gallagher & Gormley (2015). Gait deviations in children with ASD: a review. Autism Research and Treatment, art. 741480.",
-        "Hallett et al. (1993). Locomotion of autistic adults. Arch Neurol 50(12):1304-1308 — atypical upper-limb posturing; otherwise largely normal spatiotemporal gait.",
-        "Note: increased step width, reduced stride and toe-walking appear in subsets, not universally."
+        "Hallett et al. (1993). Locomotion of autistic adults. Arch Neurol 50(12):1304-1308 — 上肢姿勢不典型；時空步態大致正常。",
+        "註：步寬增加、跨步縮短與墊腳尖出現於部分族群，並非普遍現象。"
       ]
     },
     adhd:{
-      title:"ADHD", strength:"moderate",
-      summary:"The most replicated ADHD gait finding is increased stride-to-stride timing variability: children with ADHD walked with higher stride-time variability than peers even during ordinary walking (Manicolo 2017). That study found dual-task costs were similar to controls, so the signal is baseline rhythmic inconsistency rather than a special dual-task penalty.",
+      title:"ADHD（注意力不足過動症）", short:"ADHD", strength:"moderate",
+      summary:"ADHD 步態最常被重複驗證的發現是跨步間的時間變異增加：即使在一般步行下，ADHD 兒童的跨步時間變異也高於同儕（Manicolo 2017）。該研究發現雙重任務的代價與對照組相近，因此訊號是基線節律的不一致，而非特別的雙重任務負擔。",
       features:[
-        ["var","Higher stride-time variability (less rhythmic consistency)"],
-        ["var","Step-to-step inconsistency rather than a fixed posture"],
-        ["up","More extraneous / restless body movement"],
-        ["var","Less stable centre-of-mass control"]
+        ["var","跨步時間變異較高（節律一致性較低）"],
+        ["var","逐步的不一致，而非固定姿勢"],
+        ["up","多餘／不安的身體動作較多"],
+        ["var","重心控制較不穩定"]
       ],
       refs:[
-        "Manicolo, Grob & Hagmann-von Arx (2017). Gait in children with ADHD in a dual-task paradigm. Frontiers in Psychology 8:34 — higher stride-time variability vs. peers; similar dual-task cost.",
-        "Broader reviews link ADHD to motor-coordination differences and increased movement variability (findings heterogeneous)."
+        "Manicolo, Grob & Hagmann-von Arx (2017). Gait in children with ADHD in a dual-task paradigm. Frontiers in Psychology 8:34 — 跨步時間變異高於同儕；雙重任務代價相近。",
+        "較廣泛的回顧將 ADHD 連結到運動協調差異與動作變異增加（結果不一致）。"
       ]
     },
     anx:{
-      title:"Anxiety", strength:"moderate",
-      summary:"Anxiety and threat produce a 'cautious' or guarded gait: slower walking, shorter steps, fewer steps per minute, longer double-support, and stiffer trunk control — the body bracing as if the ground were less safe. High state anxiety can also raise step-placement variability. (Use the Arousal slider for the keyed-up speeding-up effect.)",
+      title:"焦慮", short:"焦慮", strength:"moderate",
+      summary:"焦慮與威脅會產生「謹慎」或防備的步態：走得較慢、步幅較短、每分鐘步數較少、雙腳支撐期較長、軀幹較僵硬——身體彷彿認為地面較不安全而戒備。高度狀態焦慮也可能增加落腳位置的變異。（想要「緊張而加速」的效果，請使用喚起滑桿。）",
       features:[
-        ["down","Slower speed, shorter steps (cautious gait)"],
-        ["up","Longer double-support time (guardedness)"],
-        ["down","Fewer steps per minute & reduced stride"],
-        ["down","Reduced arm swing / trunk rotation (stiffening)"],
-        ["var","More step-placement variability under threat"]
+        ["down","速度較慢、步幅較短（謹慎步態）"],
+        ["up","雙腳支撐期較長（戒備）"],
+        ["down","每分鐘步數較少、跨步縮短"],
+        ["down","擺臂／軀幹轉動減少（僵硬）"],
+        ["var","威脅下落腳位置變異增加"]
       ],
       refs:[
-        "Gait, balance & mobility in people with anxiety vs. controls (Gait & Posture, 2019) — slower speed, shorter steps, fewer steps/min, more double-support.",
-        "Effects of trait & state anxiety on gait in healthy young adults (Experimental Brain Research, 2024) — higher trait anxiety → slower gait & longer double-support under threat.",
-        "Cautious-gait / phobic postural vertigo concept (Brandt & Dieterich 1986; Staab 2012, Continuum 18(5):1118-41)."
+        "焦慮者與對照組之步態、平衡與行動能力（Gait & Posture, 2019）——速度較慢、步幅較短、步數較少、雙支撐較多。",
+        "特質與狀態焦慮對健康年輕人步態的影響（Experimental Brain Research, 2024）——特質焦慮越高，威脅下步態越慢、雙支撐越長。",
+        "謹慎步態／恐懼性姿勢性眩暈概念（Brandt & Dieterich 1986；Staab 2012, Continuum 18(5):1118-41）。"
       ]
     },
     dep:{
-      title:"Depression", strength:"strong",
-      summary:"This is one of the best-established trait→gait links. In Michalak et al.'s motion-capture work, dysphoric/depressed mood produced reduced walking speed, markedly reduced arm swing, a slumped (forward-flexed) posture, less vertical bounce, and increased lateral upper-body sway. Lemke's spatiotemporal study independently found slower gait, shorter strides and increased lateral sway.",
+      title:"憂鬱", short:"憂鬱", strength:"strong",
+      summary:"這是最確立的特質→步態關聯之一。在 Michalak 等人的動作捕捉研究中，憂鬱／低落情緒會造成步行速度下降、擺臂明顯減少、姿勢前傾癱垮、垂直起伏減少，以及上半身側向擺動增加。Lemke 的時空研究也獨立發現步態變慢、跨步縮短與側向擺動增加。",
       features:[
-        ["down","Reduced walking speed & cadence"],
-        ["down","Markedly reduced arm swing"],
-        ["up","Slumped / forward-flexed posture"],
-        ["down","Less vertical 'bounce' (head/COM)"],
-        ["up","Increased lateral upper-body swaying"]
+        ["down","步行速度與步頻下降"],
+        ["down","擺臂明顯減少"],
+        ["up","姿勢前傾／癱垮"],
+        ["down","垂直「起伏」減少（頭部／重心）"],
+        ["up","上半身側向擺動增加"]
       ],
       refs:[
         "Michalak et al. (2009). Embodiment of sadness and depression — gait patterns associated with dysphoric mood. Psychosom Med, 71(5):580-587.",
-        "Lemke et al. (2000). Spatiotemporal gait patterns during overground locomotion in major depression. J Psychiatr Res 34(4-5):277-283 — slower gait, shorter strides, increased lateral sway & double-support.",
-        "Replicated across motion-capture and spatiotemporal studies — among the strongest trait–gait links."
+        "Lemke et al. (2000). Spatiotemporal gait patterns during overground locomotion in major depression. J Psychiatr Res 34(4-5):277-283 — 步態變慢、跨步縮短、側向擺動與雙支撐增加。",
+        "在動作捕捉與時空研究中皆可重複——屬最強的特質–步態關聯之一。"
       ]
     },
     mania:{
-      title:"Mania", strength:"emerging",
-      summary:"Mania centres on psychomotor activation: increased energy, speed and expansiveness. Direct motion-capture gait studies are sparse, so this maps DSM-level psychomotor agitation and actigraphy findings (raised activity, faster movement) onto a fast, big, slightly erratic walk.",
+      title:"躁症", short:"躁症", strength:"emerging",
+      summary:"躁症的核心是精神運動性活化：精力、速度與外擴感增加。直接的動作捕捉步態研究稀少，因此這裡把 DSM 層級的精神運動性激動與活動紀錄（actigraphy，活動量上升、動作加快）對應為快速、誇大、略顯雜亂的步行。",
       features:[
-        ["up","Faster cadence & speed (psychomotor activation)"],
-        ["up","Longer, more expansive strides"],
-        ["up","Large, energetic arm swing & bounce"],
-        ["up","Upright / open, chest-forward posture"],
-        ["var","Somewhat erratic, restless rhythm"]
+        ["up","步頻與速度加快（精神運動性活化）"],
+        ["up","跨步更長、更外擴"],
+        ["up","大幅而有勁的擺臂與起伏"],
+        ["up","挺直／開展、胸口前挺的姿勢"],
+        ["var","略顯雜亂、不安的節律"]
       ],
       refs:[
-        "DSM-5 (2013): increased goal-directed activity & psychomotor agitation in mania.",
-        "Scott et al. / actigraphy studies — elevated motor activity in mania.",
-        "Limited direct gait-capture literature — treat as indicative."
+        "DSM-5 (2013)：躁症的目標導向活動增加與精神運動性激動。",
+        "Scott et al. ／活動紀錄（actigraphy）研究——躁症的運動活動量上升。",
+        "直接步態捕捉文獻有限——僅供參考。"
       ]
     },
     dissoc:{
-      title:"Dissociation", strength:"speculative",
-      summary:"There is little direct gait research on dissociation/depersonalization. The mapping is inferred from clinical descriptions of reduced embodiment and sense of agency — a flatter, more mechanical, 'going-through-the-motions' walk with damped expressiveness. Treat this as illustrative, not evidence-backed.",
+      title:"解離", short:"解離", strength:"speculative",
+      summary:"關於解離／人格解體的直接步態研究很少。此對應是從「具身感與能動感降低」的臨床描述推論而來——較平板、機械、像「照本宣科」的步行，表現力受抑。請當作示意，而非有實證支持。",
       features:[
-        ["down","Reduced expressiveness & bounce (flat affect of movement)"],
-        ["down","Damped arm swing & trunk dynamics"],
-        ["var","Mechanical, metronomic regularity"],
-        ["down","Reduced spontaneous head movement"]
+        ["down","表現力與起伏降低（動作情感平板）"],
+        ["down","擺臂與軀幹動力受抑"],
+        ["var","機械、節拍器般的規律"],
+        ["down","自發性頭部動作減少"]
       ],
       refs:[
         "Sierra & Berrios (1998). Depersonalization: clinical phenomenology.",
-        "Embodiment / sense-of-agency literature (Gallagher 2000).",
-        "No validated quantitative gait dataset — lowest-confidence mapping."
+        "具身／能動感文獻（Gallagher 2000）。",
+        "無經驗證的量化步態資料集——信心最低的對應。"
       ]
     },
     arousal:{
-      title:"Arousal", strength:"moderate",
-      summary:"Physiological/sympathetic arousal scales the 'energy' of gait: higher arousal generally raises cadence, speed and movement amplitude (bounce, arm swing); low arousal flattens them. Arousal is treated here as a modulator that interacts with the affective traits.",
+      title:"喚起（生理喚起）", short:"喚起", strength:"moderate",
+      summary:"生理／交感神經喚起會調節步態的「能量」：喚起越高，通常步頻、速度與動作幅度（起伏、擺臂）越大；喚起低則趨於平淡。這裡把喚起視為與情緒特質互動的調節因子。",
       features:[
-        ["up","Higher cadence & walking speed"],
-        ["up","Greater vertical bounce"],
-        ["up","Larger arm-swing amplitude"]
+        ["up","步頻與步行速度較高"],
+        ["up","垂直起伏較大"],
+        ["up","擺臂幅度較大"]
       ],
       refs:[
-        "Affect-circumplex & motor-activation literature (Russell 1980).",
-        "Actigraphy: arousal/activation correlates with movement amplitude.",
-        "Treated as a cross-cutting modulator rather than a diagnosis."
+        "情緒環狀模型與運動活化文獻（Russell 1980）。",
+        "活動紀錄：喚起／活化與動作幅度相關。",
+        "視為橫向調節因子，而非診斷。"
       ]
     },
     conf:{
-      title:"Confidence / Dominance", strength:"moderate",
-      summary:"Confidence and felt dominance are linked to expansive, upright, larger-amplitude movement — longer strides, taller posture, an open chest. Observers reliably read such gait cues as confident, though 'power-posture' causal claims are contested.",
+      title:"自信／支配感", short:"自信", strength:"moderate",
+      summary:"自信與支配感與外擴、挺直、幅度較大的動作有關——跨步更長、姿勢更挺、胸口開展。旁觀者能可靠地把這類步態線索讀為自信，不過「力量姿勢」的因果宣稱仍有爭議。",
       features:[
-        ["up","Longer stride length"],
-        ["up","Upright, extended posture (less forward lean)"],
-        ["up","Open chest & larger arm swing"],
-        ["down","Narrower, more committed base of support"]
+        ["up","跨步長度較長"],
+        ["up","姿勢挺直延展（前傾較少）"],
+        ["up","胸口開展、擺臂較大"],
+        ["down","支撐基底較窄、更篤定"]
       ],
       refs:[
-        "Satchell et al. (2017). Evidence of Big Five and Aggressive Personalities in Gait Biomechanics. J Nonverbal Behav 41:35-44 — trait–movement-magnitude links.",
-        "Montepare & Zebrowitz (1988) — emotion, age & gait perception.",
-        "Power-posture causal claims remain debated (Ranehill et al. 2015, Psych Science)."
+        "Satchell et al. (2017). Evidence of Big Five and Aggressive Personalities in Gait Biomechanics. J Nonverbal Behav 41:35-44 — 特質與動作幅度的關聯。",
+        "Montepare & Zebrowitz (1988) — 情緒、年齡與步態知覺。",
+        "「力量姿勢」的因果宣稱仍有爭議（Ranehill et al. 2015, Psych Science）。"
       ]
     },
     agg:{
-      title:"Aggression", strength:"moderate",
-      summary:"Satchell et al. (2017) used motion capture of 29 treadmill walkers and found that trait aggression and Big-Five traits related to the magnitude of upper-body (thorax) and lower-body (pelvis) movement, and to gait speed. The hallmark here is exaggerated upper-body rotation — an emphatic, swaggering walk.",
+      title:"攻擊性", short:"攻擊性", strength:"moderate",
+      summary:"Satchell 等人（2017）以動作捕捉記錄 29 名跑步機步行者，發現特質攻擊性與大五人格特質和上半身（胸廓）與下半身（骨盆）的動作幅度及步態速度有關。此處的標誌是誇大的上半身轉動——一種強勢、搖擺的走路方式。",
       features:[
-        ["up","Greater thoracic (upper-body) rotation — reads as swagger"],
-        ["up","Greater pelvic (lower-body) rotation"],
-        ["up","Gait speed relates to aggression / Big-Five traits"],
-        ["up","More emphatic, driving arm action (visualization)"]
+        ["up","胸廓（上半身）轉動較大——呈現搖擺感"],
+        ["up","骨盆（下半身）轉動較大"],
+        ["up","步態速度與攻擊性／大五特質有關"],
+        ["up","更強勢、帶勁的擺臂動作（視覺化呈現）"]
       ],
       refs:[
         "Satchell, Morris, Mills, O'Reilly, Marshman & Akehurst (2017). Evidence of Big Five and Aggressive Personalities in Gait Biomechanics. J Nonverbal Behav 41:35-44.",
-        "Troje (2002). Decomposing biological motion — encoding of person attributes. J Vision.",
-        "Note: the toe-out shown in the figure is a modelling choice, not a Satchell finding."
+        "Troje (2002). Decomposing biological motion — 對人物屬性的編碼。J Vision.",
+        "註：圖中外八（toe-out）為建模選擇，並非 Satchell 的發現。"
       ]
     }
   };
   var EV_ORDER = ["asd","adhd","anx","dep","mania","dissoc","arousal","conf","agg"];
-  var STRENGTH_TEXT = {strong:"Strong evidence",moderate:"Moderate evidence",emerging:"Emerging evidence",speculative:"Speculative"};
+  var STRENGTH_TEXT = {strong:"強證據",moderate:"中等證據",emerging:"初步證據",speculative:"推測性"};
 
   /* ---------- Evidence panel rendering ---------- */
   function renderEvidence(key){
@@ -454,14 +454,14 @@
     st.textContent = STRENGTH_TEXT[e.strength];
     st.className = "strength s-"+e.strength;
     $("evSummary").textContent = e.summary;
-    var fh = '<div class="ev-section-label">Reported gait features</div>';
+    var fh = '<div class="ev-section-label">文獻報告之步態特徵</div>';
     for(var i=0;i<e.features.length;i++){
       var d=e.features[i][0], txt=e.features[i][1];
       var sym = d==="up"?"&#9650;" : d==="down"?"&#9660;" : "&#8776;";
       fh += '<div class="feat"><span class="arrow '+d+'">'+sym+'</span><span>'+txt+'</span></div>';
     }
     $("evFeatures").innerHTML = fh;
-    var rh = '<div class="ev-section-label">Key references</div>';
+    var rh = '<div class="ev-section-label">主要參考文獻</div>';
     for(var j=0;j<e.refs.length;j++){ rh += '<div class="ref">'+e.refs[j]+'</div>'; }
     $("evRefs").innerHTML = rh;
     // tabs active state
@@ -473,7 +473,7 @@
     var html="";
     for(var i=0;i<EV_ORDER.length;i++){
       var key=EV_ORDER[i];
-      html += '<span class="ev-tab" data-trait="'+key+'">'+EVIDENCE[key].title.replace(/ \/.*$/,"").replace(" (ASD)","")+'</span>';
+      html += '<span class="ev-tab" data-trait="'+key+'">'+(EVIDENCE[key].short||EVIDENCE[key].title)+'</span>';
     }
     $("evTabs").innerHTML = html;
     var tabs=document.querySelectorAll(".ev-tab");
@@ -548,7 +548,7 @@
     var obj={}; for(var key in sliders){ obj[key]=+sliders[key].value; }
     var txt=JSON.stringify(obj);
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); }
-    var b=$("copyBtn"), old=b.textContent; b.textContent="Copied!"; setTimeout(function(){b.textContent=old;},1100);
+    var b=$("copyBtn"), old=b.textContent; b.textContent="已複製！"; setTimeout(function(){b.textContent=old;},1100);
   });
 
   var styleSel=$("styleSel"), showSkeleton=$("showSkeleton"), showTrail=$("showTrail");
@@ -1064,19 +1064,19 @@
     var speedMS=(P.cadence*P.strideLen/44)*1.35; // ~1.35 m/s baseline
     var cadenceSPM=P.cadence*112; // steps/min approx
     var strideM=(P.strideLen/44)*1.42;
-    $("chipSpeed").textContent="speed: "+speedMS.toFixed(2)+" m/s";
-    $("chipCadence").textContent="cadence: "+Math.round(cadenceSPM)+" spm";
-    $("chipStride").textContent="stride: "+strideM.toFixed(2)+" m";
-    $("chipVar").textContent="variability: "+(variability*100).toFixed(0)+"%";
+    $("chipSpeed").textContent="速度："+speedMS.toFixed(2)+" 公尺/秒";
+    $("chipCadence").textContent="步頻："+Math.round(cadenceSPM)+" 步/分";
+    $("chipStride").textContent="跨步："+strideM.toFixed(2)+" 公尺";
+    $("chipVar").textContent="變異度："+(variability*100).toFixed(0)+"%";
 
     // metrics panel (throttled)
     metricTick++;
     if(metricTick%4===0){
-      setMetric("Speed", speedMS, 0.4, 1.8, "fSpeed","mSpeed",speedMS.toFixed(2)+" m/s");
-      setMetric("Cad", cadenceSPM, 70, 150, "fCad","mCad",Math.round(cadenceSPM)+" spm");
-      setMetric("Stride", strideM, 0.8, 1.9, "fStride","mStride",strideM.toFixed(2)+" m");
+      setMetric("Speed", speedMS, 0.4, 1.8, "fSpeed","mSpeed",speedMS.toFixed(2)+" 公尺/秒");
+      setMetric("Cad", cadenceSPM, 70, 150, "fCad","mCad",Math.round(cadenceSPM)+" 步/分");
+      setMetric("Stride", strideM, 0.8, 1.9, "fStride","mStride",strideM.toFixed(2)+" 公尺");
       var widthCm=(P.stepW/22)*11;
-      setMetric("Width", widthCm, 6, 20, "fWidth","mWidth",widthCm.toFixed(1)+" cm");
+      setMetric("Width", widthCm, 6, 20, "fWidth","mWidth",widthCm.toFixed(1)+" 公分");
       var armPct=clamp(P.armAmp/52,0,1)*100;
       setMetric("Arm", armPct, 0, 100, "fArm","mArm",Math.round(armPct)+"%");
       var leanDeg=clamp(P.pitch,-0.1,0.3)*40;
